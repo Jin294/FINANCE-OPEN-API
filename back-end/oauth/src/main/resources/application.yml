@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://j9b309.p.ssafy.io:3306/i9?serverTimezone=UTC
-    username: root
-    password: ssafy
+    username: i9B309
+    password: ***REMOVED***
   jpa: # DB 쿼리 작성 없이 코드로 쉽게 데이터 처리를 위함.
     show-sql: true
     database: mysql
