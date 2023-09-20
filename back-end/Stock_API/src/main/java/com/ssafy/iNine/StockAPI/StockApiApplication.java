@@ -1,13 +1,13 @@
-package com.ssafy.iNine.FinancialAPI;
+package com.ssafy.iNine.StockAPI;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FinancialApiApplication {
+public class StockApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FinancialApiApplication.class, args);
+		SpringApplication.run(StockApiApplication.class, args);
 	}
 
 }

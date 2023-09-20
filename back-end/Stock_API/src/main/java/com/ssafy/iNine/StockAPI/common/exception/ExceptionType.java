@@ -1,4 +1,4 @@
-package com.ssafy.iNine.FinancialAPI.common.exception;
+package com.ssafy.iNine.StockAPI.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
