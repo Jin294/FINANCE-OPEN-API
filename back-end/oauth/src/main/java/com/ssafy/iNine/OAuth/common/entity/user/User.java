@@ -1,9 +1,6 @@
 package com.ssafy.iNine.OAuth.common.entity.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -23,6 +21,8 @@ import java.util.Collection;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Table(name="user")
 public class User implements UserDetails {
     @Id
@@ -38,7 +38,11 @@ public class User implements UserDetails {
     @Column(nullable = true, unique = false)
     private String state; // Y : 정상 회원 , L : 잠긴 계정, P : 패스워드 만료, A : 계정 만료
 
-    // security 기본 회원 정보인 UserDetails 클래스 implement 하기 위한 기본 함수들..
+    @Column(name = "auth_send_time")
+    private LocalDateTime authSendTime;
+
+    @Column(name = "auth_request_time")
+    private LocalDateTime authRequestTime;
 
     // 권한 (기본 권한 셋팅)
     @Override
