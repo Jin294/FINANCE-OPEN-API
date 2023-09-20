@@ -38,6 +38,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if(!StringUtils.equals(password, StringUtils.replace(info.getPassword(), "{noop}",""))){
             throw new UsernameNotFoundException("please password check");
         }
+        log.info("login success");
         return new UsernamePasswordAuthenticationToken(username,password,authentication.getAuthorities());
     }
 }

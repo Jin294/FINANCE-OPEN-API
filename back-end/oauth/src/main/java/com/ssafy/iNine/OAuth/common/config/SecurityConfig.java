@@ -2,6 +2,7 @@ package com.ssafy.iNine.OAuth.common.config;
 
 import com.ssafy.iNine.OAuth.common.authentication.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,12 +10,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAuthenticationProvider customAuthenticationProvider;
     @Bean
@@ -41,9 +50,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/js/**").permitAll()
                 .antMatchers("/oauth/user/email/**").permitAll()
+                .antMatchers("/oauth/style.css").permitAll()
+                .antMatchers("/oauth/login/**").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin()
                 .loginPage("/oauth/login")
+                .failureHandler(new AuthenticationFailureHandler() {
+                    @Override
+                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+                        log.info("login fail");
+                        response.sendRedirect("http://localhost:8085/oauth/login?error=true");
+                    }
+                })
                 .permitAll()
                 .and()
                 .httpBasic();

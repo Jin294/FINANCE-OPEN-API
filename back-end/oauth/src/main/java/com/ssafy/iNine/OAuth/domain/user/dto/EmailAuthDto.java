@@ -3,13 +3,10 @@ package com.ssafy.iNine.OAuth.domain.user.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Document(collection = "email")
 @Getter
 @NoArgsConstructor
 @ToString(of = {"email", "key"})
@@ -20,7 +17,6 @@ public class EmailAuthDto {
     private String email;
     private String key;
 
-    @Indexed(expireAfterSeconds = 600)
     private LocalDateTime createdAt;
 
     public EmailAuthDto(String email, String key) {

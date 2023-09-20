@@ -39,7 +39,7 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(dataSource);
     }
-//  http://localhost:8085/oauth/authorize?response_type=code&client_id=clientId&secret_key=secretKey&redirect_uri=http://localhost:8085/callback&scope=read
+//  http://localhost:8085/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=http://localhost:8085/callback&scope=read
 
     //token db 저장
 //    @Bean
