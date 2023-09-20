@@ -26,7 +26,7 @@ public class StockController {
     private final StockService stockService;
 
     /**
-     * original : /v1/invest/accounts
+     * 마이데이터 표준 : /v1/invest/accounts
      * 특정 증권사의 계좌목록 조회
      * @return 해당 증권사에 존재하는 나의 계좌목록들
      */
@@ -82,27 +82,47 @@ public class StockController {
         return ResponseEntity.ok(map);
     }
 
+    /**
+     * 우리 서비스 오리지널
+     * 모든 증권사의 내 투자정보를 한 번에 조회
+     * @param userIdx
+     * @return
+     */
     @GetMapping("/accounts/all")
     public ResponseEntity<Map<String, Object>> getAllOfMine(int userIdx) {
-        Map<String, List<StockAccount>> accountsByFirm = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
+        Map<String, List<StockAccountDto>> accountsByFirm = new HashMap<>();
 
         // 모든 증권사의 코드를 가져온다
         List<StockFirmDto> codes = stockService.getFirmCodes();
         for (StockFirmDto dto : codes) {
-            // 증권사별로 내 계좌가 존재하는지 조회한다.
+            // 각 증권사 별 계좌목록 리스트
             List<StockAccountDto> list = stockService.getAccounts(userIdx, dto.getFirmCode());
+
             // 해당 증권사에 내 계좌가 존재한다면 취합한다.
             if (list != null && list.size() != 0) {
-
+                accountsByFirm.put(dto.getFirmCode(), list);
             }
         }
 
-        return null;
+        map.put("list", accountsByFirm);
+        return ResponseEntity.ok(map);
     }
 
+    /**
+     * 마이데이터 표준
+     * fromDate와 toDate 사이의 거래내역 조회
+     * @param orgCode
+     * @param accountNum
+     * @param fromDate
+     * @param toDate
+     * @param nextPage
+     * @param limit
+     * @return
+     */
     public ResponseEntity<Map<String, Object>> getTransactions(String orgCode, String accountNum, LocalDateTime fromDate, LocalDateTime toDate, @Nullable String nextPage, int limit) {
         Map<String, Object> map = new HashMap<>();
-        r
 
+        return ResponseEntity.ok(map);
     }
 }
