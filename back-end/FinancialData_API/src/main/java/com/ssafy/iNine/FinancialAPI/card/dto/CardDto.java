@@ -40,6 +40,7 @@ public class CardDto {
         private String cardType;
 
 
+
         public static CardDataDto of(Card card) {
             return CardDataDto.builder()
                     .cardId(card.getCardId())

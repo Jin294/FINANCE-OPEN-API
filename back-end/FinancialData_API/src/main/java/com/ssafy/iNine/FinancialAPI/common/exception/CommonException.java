@@ -8,3 +8,4 @@ import lombok.Getter;
 public class CommonException extends RuntimeException {
      private final ExceptionType exceptionType;
 }
+
