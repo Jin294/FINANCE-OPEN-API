@@ -24,7 +24,7 @@ public class CardService {
     // userId로 카드 정보 저장된게 있는지 찾고 없으면 카드 더미 데이터를 생성하고 있으면 기존 카드 정보를 반환
     public CardDto.CardResponseDto getUserCardList(CardDto.CardRequestDto cardRequestDto) {
 
-        // userId로 카드 정보 조회 반환용dto
+        // userId로 카드 정보 조회
         List<Card> cardList = cardRepository.findByUserId(cardRequestDto.getUserId());
 
         // 카드 정보가 없으면 더미 데이터 생성
@@ -66,25 +66,16 @@ public class CardService {
         // 페이지네이션된 카드 데이터 추출
         List<Card> paginatedCards = cardList.subList(startIndex, endIndex);
 
-        // 카드 데이터를 CardDataDto 형태로 변환하여 반환(왜?)
+        // 카드 데이터를 CardDataDto 형태로 변환하여 반환(???)
         List<CardDto.CardDataDto> paginatedCardData = new ArrayList<>();
         for (Card card : paginatedCards) {
-            CardDto.CardDataDto cardData = convertToCardDataDto(card);
-            paginatedCardData.add(cardData);
+
+            paginatedCardData.add(CardDto.CardDataDto.of(card));
         }
 
         return paginatedCardData;
     }
-    private CardDto.CardDataDto convertToCardDataDto(Card card) {
-        return CardDto.CardDataDto.builder()
-                .cardId(card.getCardId())
-                .cardNum(card.getCardNum())
-                .isConsent(card.getIsConsent())
-                .cardName(card.getCardName())
-                .cardMember(card.getCardMember())
-                .cardType(card.getCardType())
-                .build();
-    }
+
 
     private int findLastIndex(List<Card> cardList, Integer nextPage) {
         for (int i = 0; i < cardList.size(); i++) {
@@ -110,6 +101,7 @@ public class CardService {
             card.setCardName(cardData.getCardName());
             card.setCardMember(cardData.getCardMember());
             card.setCardType(cardData.getCardType());
+
 
             cards.add(card);
         }

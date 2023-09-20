@@ -18,7 +18,7 @@ public class CardTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId; // 카드거래내역 고유 식별자(자동증가)
 
-    private String approvedNum; // 승인번호
+    private Long approvedNum; // 승인번호
     private Timestamp approvedDtime; // 승인일시 금융소비자가 물품을 구매하거나 용역을 제공받은 날짜와 시간
     private String status; // 결제상태 코드 01: 승인, 02: 승인취소, 03: 정정, 04: 무승인매입
     private String payType; // 신용, 체크 구분 01: 신용, 02: 체크
@@ -32,6 +32,7 @@ public class CardTransaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cardId") // 외래 키로 사용할 카드의 식별자
     private Card card;
+
 
 
 }

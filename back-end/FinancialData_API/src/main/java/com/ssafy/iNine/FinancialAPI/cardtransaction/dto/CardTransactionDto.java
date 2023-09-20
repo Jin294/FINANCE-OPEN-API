@@ -19,11 +19,11 @@ public class CardTransactionDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CardTransactionRequestDto {
-        private String cardId;
+        private Long cardId;
         private String orgCode;
         private Timestamp fromDate;
         private Timestamp toDate;
-        private String nextPage;
+        private Integer nextPage;
         private Integer limit;
     }
 
@@ -35,7 +35,7 @@ public class CardTransactionDto {
     public static class CardTransactionDataDto {
 
         private Long transactionId;
-        private String approvedNum;
+        private Long approvedNum;
         private Timestamp approvedDtime;
         private String status;
         private String payType;
@@ -47,23 +47,23 @@ public class CardTransactionDto {
         private Integer totalInstallCnt;
 
         private Long cardId;
-    }
 
-    public static CardTransactionDataDto of(CardTransaction transaction) {
-        return CardTransactionDataDto.builder()
-                .transactionId(transaction.getTransactionId())
-                .approvedNum(transaction.getApprovedNum())
-                .approvedDtime(transaction.getApprovedDtime())
-                .status(transaction.getStatus())
-                .payType(transaction.getPayType())
-                .transDtime(transaction.getTransDtime())
-                .merchantName(transaction.getMerchantName())
-                .merchantRegno(transaction.getMerchantRegno())
-                .approvedAmt(transaction.getApprovedAmt())
-                .modifiedAmt(transaction.getModifiedAmt())
-                .totalInstallCnt(transaction.getTotalInstallCnt())
-                .cardId(transaction.getCard().getCardId())
-                .build();
+        public static CardTransactionDataDto of(CardTransaction transaction) {
+            return CardTransactionDataDto.builder()
+                    .transactionId(transaction.getTransactionId())
+                    .approvedNum(transaction.getApprovedNum())
+                    .approvedDtime(transaction.getApprovedDtime())
+                    .status(transaction.getStatus())
+                    .payType(transaction.getPayType())
+                    .transDtime(transaction.getTransDtime())
+                    .merchantName(transaction.getMerchantName())
+                    .merchantRegno(transaction.getMerchantRegno())
+                    .approvedAmt(transaction.getApprovedAmt())
+                    .modifiedAmt(transaction.getModifiedAmt())
+                    .totalInstallCnt(transaction.getTotalInstallCnt())
+                    .cardId(transaction.getCard().getCardId())
+                    .build();
+        }
     }
 
 
@@ -73,12 +73,12 @@ public class CardTransactionDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CardTransactionResponseDto {
-        private String nextPage;
+        private Integer nextPage;
         private Integer approvedCnt;
         private List<CardTransactionDataDto> approvedList;
     }
 
-    public static CardTransactionResponseDto of(String nextPage, Integer approvedCnt, List<CardTransactionDataDto> approvedList) {
+    public static CardTransactionResponseDto of(Integer nextPage, Integer approvedCnt, List<CardTransactionDataDto> approvedList) {
         return CardTransactionResponseDto.builder()
                 .nextPage(nextPage)
                 .approvedCnt(approvedCnt)
