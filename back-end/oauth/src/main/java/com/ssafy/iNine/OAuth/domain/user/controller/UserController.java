@@ -25,7 +25,6 @@ public class UserController {
     public String confirm(HttpServletRequest request){
         AuthorizationRequest authorizationRequest = (AuthorizationRequest) request.getSession().getAttribute("authorizationRequest");
         log.info("clientid:{}", authorizationRequest.getClientId());
-//        return "confirm";
         return "confirmForm";
     }
 
@@ -41,13 +40,6 @@ public class UserController {
         userService.sendEmail(email);
         return new CommonResponse(200, "이메일 인증 요청 성공");
     }
-
-//    @PostMapping("/user/emailauth")
-//    @ResponseBody
-//    public CommonResponse checkEmail(@RequestBody Map<String, String> request) {
-//        userService.validateEmailCode(request.get("email"), request.get("authCode"));
-//        return new CommonResponse(200, "이메일 인증 성공");
-//    }
 
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false)String error, Model model) {

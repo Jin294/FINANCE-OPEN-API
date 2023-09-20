@@ -18,7 +18,7 @@ const emailButton = document.getElementById("email-button");
             passwordbutton.hidden = !passwordbutton.hidden
             emailBack.hidden = !emailBack.hidden
 
-            axios.get(`http://localhost:8085/oauth/user/email/${email.value}`).then((res) => {
+            axios.get(`http://j9b309.p.ssafy.io/oauth/user/email/${email.value}`).then((res) => {
                 console.log(res)
             })
         })

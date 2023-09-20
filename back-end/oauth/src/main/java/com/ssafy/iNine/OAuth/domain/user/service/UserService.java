@@ -3,7 +3,6 @@ package com.ssafy.iNine.OAuth.domain.user.service;
 import com.ssafy.iNine.OAuth.common.entity.user.User;
 import com.ssafy.iNine.OAuth.common.exception.CommonException;
 import com.ssafy.iNine.OAuth.common.exception.ExceptionType;
-import com.ssafy.iNine.OAuth.domain.user.dto.EmailAuthDto;
 import com.ssafy.iNine.OAuth.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,30 +71,4 @@ public class UserService {
             throw new CommonException(ExceptionType.EMAIL_SEND_FAIL);
         }
     }
-
-//    public void validateEmailCode(String email, String authCode) {
-//        EmailAuthDto emailAuthDto = emailRepository.findByEmail(email)
-//                .orElseThrow(() -> new CommonException(ExceptionType.EMAIL_NOT_FOUND));
-//
-//        if (!emailAuthDto.getKey().equals(authCode)) {
-//            throw new CommonException(ExceptionType.EMAIL_CODE_NOT_MATCH);
-//        }
-//        emailRepository.delete(emailAuthDto);
-//        Optional<User> user = userRepository.findById(email);
-//        if(user.isPresent()) {
-//            userRepository.setUserPassword(authCode, user.get().getId());
-//        }
-//        else {
-//            User newUser = User.builder()
-//                    .id(email)
-//                    .password("{noop}"+authCode)
-//                    .state("Y")
-//                    .build();
-//            userRepository.save(newUser);
-//        }
-//    }
-
-//    public void insertCode(String email, String code) {
-//        EmailAuthDto emailAuthDto = new EmailAuthDto(email, code);
-//    }
 }

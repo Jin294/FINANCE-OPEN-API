@@ -21,7 +21,3 @@ spring:
 jwt:
   secretKey: c3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHVhb3JpYWkta3ByaW5nYm9vdC1qd3QtdHV0b3JpYWk=
 
-  # mongoDB
-#  data:
-#    mongodb:
-#    #uri: mongodb+srv://S09P13B304:ssafy@ssafy.ngivl.mongodb.net/S09P13B304?authSource=admin

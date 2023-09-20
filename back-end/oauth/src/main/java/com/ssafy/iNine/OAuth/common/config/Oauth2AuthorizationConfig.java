@@ -39,13 +39,6 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(dataSource);
     }
-//  http://localhost:8085/oauth/authorize?response_type=code&client_id=clientId&redirect_uri=http://localhost:8085/callback&scope=read
-
-    //token db 저장
-//    @Bean
-//    public TokenStore tokenStore() {
-//        return new JdbcTokenStore(dataSource);
-//    }
 
     // 권한 동의 DB 저장
     @Bean
@@ -57,10 +50,8 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
                 .authenticationManager(authenticationManager)
-//                .tokenStore(tokenStore())
                 .userDetailsService(userDetailsService)
                 .accessTokenConverter(jwtAccessTokenConverter());
-//                .approvalStore(approvalStore()); // 권한 동의 설정
     }
 
     @Bean
@@ -69,11 +60,6 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
         KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwtkey.jks"), "i9ssafyi91234!!!".toCharArray());
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setKeyPair(keyStoreKeyFactory.getKeyPair("jwtkey"));
-
-        // 대칭키 암호화 : key 값은 리소스 서버에도 넣고 하면 됨.
-         /*JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("key");*/
-
         return converter;
     }
 }
