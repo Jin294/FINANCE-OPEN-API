@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "stock_account")
+@Table(name = "account")
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class StockAccount {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String accountNumber; // 계좌번호

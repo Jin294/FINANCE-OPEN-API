@@ -9,11 +9,11 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "stock_firm")
+@Table(name = "firm")
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class StockFirm {
+public class Firm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String firmName;

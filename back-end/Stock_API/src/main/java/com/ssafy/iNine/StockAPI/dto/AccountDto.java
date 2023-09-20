@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockAccountDto {
+public class AccountDto {
     private String accountNumber; // 계좌번호
     private String isConsent; // 전송요구 여부
     private String accountName; // 계좌명

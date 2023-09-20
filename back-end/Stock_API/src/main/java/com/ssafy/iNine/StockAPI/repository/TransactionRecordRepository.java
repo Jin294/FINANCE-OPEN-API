@@ -10,7 +10,7 @@ import java.util.List;
 public interface TransactionRecordRepository extends JpaRepository<TransactionRecord, TransactionRecordKey> {
     List<TransactionRecord> findByAccountNumberAndIsFinal(String accountNumber, int isFinal);
 
-    List<TransactionRecord> findByAccountNumberAndIsFinalAndIdTradedAtBetween(
-            String accountNumber, int isFinal, LocalDateTime fromDate, LocalDateTime toDate);
+    List<TransactionRecord> findByAccountNumberAndIdTradedAtBetween(
+            String accountNumber, LocalDateTime fromDate, LocalDateTime toDate);
 }
 

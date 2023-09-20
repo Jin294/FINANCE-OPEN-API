@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockFirmDto {
+public class FirmDto {
     private String firmName;
     private String firmCode;
 }
