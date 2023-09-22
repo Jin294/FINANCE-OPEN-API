@@ -41,9 +41,6 @@ public class Service {
                     dto.setIssueDate(account.getIssueDate());
                     dto.setTaxBenefits(account.isTaxBenefits());
 
-                    dto.setFirmCode(account.getFirmCode());
-                    dto.setUserIdx(account.getUserIdx());
-
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -94,7 +91,7 @@ public class Service {
      * 3. 2에서 불러온 내역들을 주식종목 별로 분류하기
      * 4. 체결 여부 확인하면서 수량 및 평단가 계산
      *
-     * @param accountNumber 계좌번호
+     * @param accountNum 계좌번호
      * @return
      */
     public List<TransactionRecordDto> getRecords(String orgCode, String accountNum, LocalDateTime fromDate, LocalDateTime toDate) {

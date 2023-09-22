@@ -1,17 +1,11 @@
 package com.ssafy.iNine.StockAPI.controller;
 
-import com.ssafy.iNine.StockAPI.dto.AccountDto;
-import com.ssafy.iNine.StockAPI.dto.FirmDto;
-import com.ssafy.iNine.StockAPI.dto.TransactionRecordDto;
+import com.ssafy.iNine.StockAPI.dto.*;
 import com.ssafy.iNine.StockAPI.service.Service;
-import com.ssafy.iNine.StockAPI.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -30,10 +24,10 @@ public class Controller {
      * 특정 증권사의 계좌목록 조회
      * @return 해당 증권사에 존재하는 나의 계좌목록들
      */
-    @GetMapping("/accounts/{orgCode}")
-    public ResponseEntity<Map<String, Object>> getAccountsByFirm(int userIdx, @PathVariable String orgCode, @Nullable String searchTimestamp, @Nullable String nextPage, int limit) {
+    @PostMapping("/accounts/{userIdx}")
+    public ResponseEntity<Map<String, Object>> getAccountsByFirm(@PathVariable int userIdx, @RequestBody RequestDto requestDto) {
         Map<String, Object> map = new HashMap<>();
-        List<AccountDto> accounts = service.getAccounts(userIdx, orgCode);
+        List<AccountDto> accounts = service.getAccounts(userIdx, requestDto.getOrgCode());
 
         // rsp_code : 세부 응답코드
         map.put("rsp_code", 0);
@@ -51,8 +45,8 @@ public class Controller {
      * 모든 증권사의 계좌목록을 한 번에 조회
      * @return 금융사에 존재하는 나의 계좌목록들
      */
-    @GetMapping("/accounts/list")
-    public ResponseEntity<Map<String, Object>> getAllAccounts(int userIdx) {
+    @PostMapping("/myAllAccountnumbers/{userIdx}")
+    public ResponseEntity<Map<String, Object>> getAllAccounts(@PathVariable int userIdx) {
         Map<String, Object> map = new HashMap<>();
 
         Map<String, List<AccountDto>> accountsByFirm = new HashMap<>();
@@ -75,17 +69,13 @@ public class Controller {
      * 마이데이터 표준 : /v1/invest/accounts/products
      * 정보주체가 보유한 계좌에 포함된 상품의 조회 시점 기준 상세 정보 조회
      * @param userIdx 고객 고유번호
-     * @param orgCode 정보제공자 기관코드
-     * @param accountNum 계좌번호
-     * @param searchTimestamp 조회 타임스탬프
-     * @param nextPage 다음페이지 기준개체
-     * @param limit 최대조회갯수
+     * @param dto
      * @return
      */
-    @GetMapping("/accounts/detail")
-    public ResponseEntity<Map<String, Object>> getAccountDetail(int userIdx, @PathVariable String orgCode, String accountNum, @Nullable String searchTimestamp, @Nullable String nextPage, int limit) {
+    @PostMapping("/accounts/detail")
+    public ResponseEntity<Map<String, Object>> getAccountDetail(int userIdx, @RequestBody RequestDto dto) {
         Map<String, Object> map = new HashMap<>();
-        List<ProductDto> products = service.getProductsFromRecords(accountNum);
+        List<ProductDto> products = service.getProductsFromRecords(dto.getAccountNum());
 
         map.put("rsp_code", 0);
         map.put("rsp_msg", 0);
@@ -104,8 +94,8 @@ public class Controller {
      * @param userIdx
      * @return
      */
-    @GetMapping("/accounts/all")
-    public ResponseEntity<Map<String, Object>> getAllOfMine(int userIdx) {
+    @PostMapping("/myAllInvest/{userIdx}")
+    public ResponseEntity<Map<String, Object>> getAllOfMine(@PathVariable int userIdx) {
         Map<String, Object> map = new HashMap<>();
         Map<String, List<AccountDto>> accountsByFirm = new HashMap<>();
 
@@ -128,18 +118,19 @@ public class Controller {
     /**
      * 마이데이터 표준 : /v1/invest/accounts/transactions
      * fromDate와 toDate 사이의 거래내역 조회
-     * @param orgCode
-     * @param accountNum
-     * @param fromDate
-     * @param toDate
-     * @param nextPage
-     * @param limit
+     * @param requestDto
      * @return
      */
-    public ResponseEntity<Map<String, Object>> getTransactions(String orgCode, String accountNum, LocalDateTime fromDate, LocalDateTime toDate, @Nullable String nextPage, int limit) {
+    @PostMapping("/transRecord")
+    public ResponseEntity<Map<String, Object>> getTransactions(@RequestBody RequestDto requestDto) {
         Map<String, Object> map = new HashMap<>();
 
-        List<TransactionRecordDto> list = service.getRecords(orgCode, accountNum, fromDate, toDate);
+        List<TransactionRecordDto> list = service.getRecords(
+                requestDto.getOrgCode(),
+                requestDto.getAccountNum(),
+                requestDto.getFromDate(),
+                requestDto.getToDate());
+
         map.put("rsp_code", 0);
         map.put("rsp_msg", 0);
         map.put("trans_cnt", list.size());

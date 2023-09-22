@@ -1,11 +1,9 @@
 package com.ssafy.iNine.StockAPI.dto;
 
-import com.ssafy.iNine.StockAPI.key.TransactionRecordKey;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.EmbeddedId;
 import java.time.LocalDateTime;
 
 @Getter

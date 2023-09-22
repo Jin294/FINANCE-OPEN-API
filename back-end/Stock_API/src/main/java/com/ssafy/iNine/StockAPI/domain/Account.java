@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Account {
+    private int userIdx; // 고객 번호
+    private String firmCode; // 증권사코드
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String accountNumber; // 계좌번호
@@ -22,6 +25,4 @@ public class Account {
     private LocalDateTime issueDate; // 계좌개설일
     private boolean isTaxBenefits; // 세제혜택 적용여부
 
-    private String firmCode; // 증권사코드
-    private int userIdx; // 고객 번호
 }

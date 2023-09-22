@@ -1,17 +1,13 @@
 package com.ssafy.iNine.StockAPI.domain;
 
-import com.ssafy.iNine.StockAPI.key.TransactionRecordKey;
 import lombok.Getter;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 public class TransactionRecord {
-    @EmbeddedId
-    private TransactionRecordKey id;
     private int userIdx;
     private String orgCode; // 증권사코드
     private String accountNumber; // 계좌번호
@@ -19,6 +15,8 @@ public class TransactionRecord {
     private String prodName; // 종목명 (상품명, 거래가 발생한 상품의 명칭)
     private String prodCode; // 종목코드 (상품코드)
     private LocalDateTime transDtime; // 거래일시 또는 거래일자
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String transNo; // 거래번호 (해당 일자의 거래 특정 번호, 없을 경우 미회신)
     private String transType; // 거래종류 (거래종류 특정코드)
     private String transTypeDetail; // 상세 거래 종류 (코드가 아닌 상세 거래 종류 명)
