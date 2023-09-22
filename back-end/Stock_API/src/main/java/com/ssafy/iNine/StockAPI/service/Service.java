@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
@@ -23,19 +25,20 @@ public class Service {
     private final TransactionRecordRepository recordRepository;
 
     /**
-     * 고객번호와 증권사가 일치하는 증권계좌를 가져온다
+     * 고객번호와 단일 증권사가 일치하는 복수의 증권계좌를 가져온다
      * (하나의 증권사에 여러개의 계좌를 가질수도 있으니까)
      *
-     * @param userIdx
+     * @param userId
      * @param firmCode
      * @return
      */
-    public List<AccountDto> getAccounts(int userIdx, String firmCode) {
-        List<AccountDto> dtos = accountRepository.findByUserIdxAndFirmCode(userIdx, firmCode).stream()
+    public List<AccountDto> getAccountsFromSingleFirm(String userId, String firmCode) {
+
+        return accountRepository.findByUserIdAndFirmCode(userId, firmCode).stream()
                 .map(account -> {
                     AccountDto dto = new AccountDto();
                     dto.setAccountNumber(account.getAccountNumber());
-                    dto.setIsConsent(account.getIsConsent());
+                    dto.setConsent(account.isConsent());
                     dto.setAccountName(account.getAccountName());
                     dto.setAccountType(account.getAccountType());
                     dto.setIssueDate(account.getIssueDate());
@@ -44,8 +47,6 @@ public class Service {
                     return dto;
                 })
                 .collect(Collectors.toList());
-
-        return dtos;
     }
 
     /**
@@ -65,37 +66,38 @@ public class Service {
     }
 
     /**
-     * 해당 계좌가 생성된 날짜를 리턴한다
-     *
-     * @param accountNumber
+     * 증권사별로 내 계좌가 존재하는지 조회한다.
+     * @param userId
+     * @param firmCodes
      * @return
      */
-    public LocalDateTime getCreatedAt(String accountNumber) {
-        return accountRepository.findByAccountNumber(accountNumber).getIssueDate();
+    public Map<String, List<AccountDto>> getAccountsFromAllFirms(String userId, List<FirmDto> firmCodes) {
+        Map<String, List<AccountDto>> result = new HashMap<>();
+
+        // 모든 증권사의 코드
+        for (FirmDto dto : firmCodes) {
+            // 단일 증권사의 계좌목록을 가져온다.
+            List<AccountDto> list = getAccountsFromSingleFirm(userId, dto.getFirmCode());
+            // 해당 증권사에 내 계좌가 존재한다면 취합한다.
+            if (list != null || list.size() != 0) {
+                result.put(dto.getFirmCode(), list);
+            }
+        }
+
+        return result;
     }
 
-    /**
-     * 해당 계좌가 최종적으로 업데이트된 날짜를 리턴한다
-     *
-     * @param accountNumber
-     * @return
-     */
-//    public LocalDateTime getUpdatedAt(String accountNumber) {
-//        return accountRepository.findByAccountNumber(accountNumber).getUpdatedAt();
-//    }
 
     /**
-     * 거래기록으로부터 내 주식보유내역 구하기
-     * 1. 계좌 개설날짜 구하기
-     * 2. 거래내역에서 내 계좌번호와 일치하고 거래가 체결된 내역들을 불러오기
-     * 3. 2에서 불러온 내역들을 주식종목 별로 분류하기
-     * 4. 체결 여부 확인하면서 수량 및 평단가 계산
-     *
-     * @param accountNum 계좌번호
+     * fromDate와 toDate 사이의 거래내역 구하기
+     * @param orgCode
+     * @param accountNum
+     * @param fromDate
+     * @param toDate
      * @return
      */
     public List<TransactionRecordDto> getRecords(String orgCode, String accountNum, LocalDateTime fromDate, LocalDateTime toDate) {
-        return recordRepository.findByAccountNumberAndIdTradedAtBetween(accountNum, fromDate, toDate).stream().map(
+        return recordRepository.findByAccountNumberAndTransDtimeBetween(accountNum, fromDate, toDate).stream().map(
                 record -> TransactionRecordDto.builder()
                             .prodName(record.getProdName())
                             .prodCode(record.getProdCode())
@@ -113,6 +115,16 @@ public class Service {
                             .build()).collect(Collectors.toList());
     }
 
+    /**
+     * 거래기록으로부터 내 주식보유내역 구하기
+     * 1. 계좌 개설날짜 구하기
+     * 2. 거래내역에서 내 계좌번호와 일치하고 거래가 체결된 내역들을 불러오기
+     * 3. 2에서 불러온 내역들을 주식종목 별로 분류하기
+     * 4. 체결 여부 확인하면서 수량 및 평단가 계산
+     *
+     * @param accountNum 계좌번호
+     * @return
+     */
     public List<ProductDto> getProductsFromRecords(String accountNum) {
         return null;
     }

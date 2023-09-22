@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 public class TransactionRecord {
-    private int userIdx;
+    private String userId;
     private String orgCode; // 증권사코드
     private String accountNumber; // 계좌번호
 
