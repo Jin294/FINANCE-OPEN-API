@@ -17,8 +17,6 @@ public class ServiceProviderDto {
         private String password;
         private String user_class;
         private String area;
-        private String content;
-        private String url;
 
         public void encodePassword(String password) {
             this.password = password;
@@ -42,9 +40,7 @@ public class ServiceProviderDto {
         private String email;
         private String password;
         private String ssafy_class;
-        private String area;
         private String content;
-        private String url;
         private LocalDateTime created_time;
         private LocalDateTime deleted_time;
         private Boolean is_deleted;
@@ -58,8 +54,6 @@ public class ServiceProviderDto {
         private String password;
         private String ssafy_class;
         private String area;
-        private String content;
-        private String url;
         private LocalDateTime created_time;
         private LocalDateTime deleted_time;
         private Boolean is_deleted;

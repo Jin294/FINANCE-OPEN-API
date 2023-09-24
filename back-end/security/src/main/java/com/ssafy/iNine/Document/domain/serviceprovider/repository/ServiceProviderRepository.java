@@ -29,7 +29,7 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
     @Query("UPDATE ServiceProvider s SET s.password = :password WHERE s.serviceProviderId = :serviceProviderId")
     void modifyPassword(@Param("serviceProviderId") Long serviceProviderId, @Param("password") String password);
 
-//    @Modifying
-//    @Query("UPDATE ServiceProvider s SET s.oAuthClientDetails = :oAuthClientDetails WHERE s.serviceProviderId = :serviceProviderId")
-//    void setClient(@Param("serviceProviderId") Long serviceProviderId, @Param("oAuthClientDetails") OAuthClientDetails oAuthClientDetails);
+    @Modifying
+    @Query("UPDATE ServiceProvider s SET s.apiToken = :apiToken WHERE s.serviceProviderId = :serviceProviderId")
+    void modifyApiToken(@Param("serviceProviderId") Long serviceProviderId, @Param("apiToken") String apiToken);
 }

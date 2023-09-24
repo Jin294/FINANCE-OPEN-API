@@ -35,9 +35,6 @@ public class ServiceProvider {
     @Column(name = "api_token", length = 300)
     private String apiToken;
 
-    @Column(name = "content", columnDefinition = "TEXT")
-    private String content;
-
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 
@@ -47,8 +44,4 @@ public class ServiceProvider {
     @Column(name = "is_deleted")
     @ColumnDefault("false")
     private Boolean isDeleted;
-
-//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "client_id")
-//    private OAuthClientDetails oAuthClientDetails;
 }

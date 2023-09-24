@@ -70,10 +70,23 @@ public class ServiceProviderService {
 
         if(registForm.getUser_class() != null) serviceProvider.setUserClass(registForm.getUser_class());
         if(registForm.getArea() != null) serviceProvider.setArea(registForm.getArea());
-        if(registForm.getContent() != null) serviceProvider.setContent(registForm.getContent());
         log.info("user id:{}", serviceProvider.getServiceProviderId());
         userRepository.save(serviceProvider);
     }
+
+    public void setApiToken(Long userId) {
+        ServiceProvider serviceProvider = userRepository.findById(userId).orElseThrow(()->{
+            return new CommonException(ExceptionType.USER_NOT_FOUND);
+        });
+        userRepository.modifyApiToken(userId, JwtUtil.generateApiToken(serviceProvider.getEmail()));
+    }
+    public String getApiToken(Long userId) {
+        ServiceProvider serviceProvider = userRepository.findById(userId).orElseThrow(()->{
+            return new CommonException(ExceptionType.USER_NOT_FOUND);
+        });
+        return serviceProvider.getApiToken();
+    }
+
 
     public void deleteUser(Long userId) {
         userRepository.deleteUser(userId, LocalDateTime.now());
@@ -82,6 +95,7 @@ public class ServiceProviderService {
     public void modifyPassword(Long userId, String password) {
         userRepository.modifyPassword(userId, passwordEncoder.encode(password));
     }
+
 
     public void setOAuthClient(Long userId, OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
         ServiceProvider serviceProvider = userRepository.findById(userId)

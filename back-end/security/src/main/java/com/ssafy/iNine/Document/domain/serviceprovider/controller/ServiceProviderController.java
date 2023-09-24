@@ -16,6 +16,7 @@ import java.util.Map;
 @RequestMapping("/docs/service")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin("*")
 public class ServiceProviderController {
 
     private final ServiceProviderService serviceProviderService;
@@ -40,15 +41,29 @@ public class ServiceProviderController {
 
     @PutMapping("/password")
     public CommonResponse modifyPassword(Principal principal, @RequestBody Map<String, String> passwordMap) {
-        Long userId = Long.parseLong(principal.getName());
-        serviceProviderService.modifyPassword(userId, passwordMap.get("password"));
+        Long serviceProviderId = Long.parseLong(principal.getName());
+        serviceProviderService.modifyPassword(serviceProviderId, passwordMap.get("password"));
         return new CommonResponse(200, "success");
     }
 
     @PutMapping("/client")
     public CommonResponse setClient(Principal principal, @RequestBody OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
-        Long userId = Long.parseLong(principal.getName());
-        serviceProviderService.setOAuthClient(userId, oAuthClientRegistForm);
+        Long serviceProviderId = Long.parseLong(principal.getName());
+        serviceProviderService.setOAuthClient(serviceProviderId, oAuthClientRegistForm);
         return new CommonResponse(200, "success");
     }
+
+    @PostMapping("/token")
+    public CommonResponse setApiToken(Principal principal) {
+        Long serviceProviderId = Long.parseLong(principal.getName());
+        serviceProviderService.setApiToken(serviceProviderId);
+        return new CommonResponse(200, "success");
+    }
+    @GetMapping("/token")
+    public DataResponse<String> getApiToken(Principal principal) {
+        Long serviceProviderId = Long.parseLong(principal.getName());
+        String apiToken = serviceProviderService.getApiToken(serviceProviderId);
+        return new DataResponse<>(200, "success", apiToken);
+    }
+
 }
