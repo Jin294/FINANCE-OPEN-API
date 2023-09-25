@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/oauth")
 public class OAuthController {
     @Value("${url.host}")
     private String hostUrl;
@@ -52,7 +53,7 @@ public class OAuthController {
         return oauthToken;
     }
 //http://localhost:8085/oauth/authorize?response_type=code&client_id=79c85820-6ed5-4c99-a9d8-22c68374883b&redirect_uri=http://localhost:8085/callback2&scope=read
-    @RequestMapping("/callback2")
+    @RequestMapping("/test")
     public OauthToken.response code2(@RequestParam String code)  {
 
         String cridentials = "test:test";
@@ -64,7 +65,7 @@ public class OAuthController {
         OauthToken.request.accessToken request = new OauthToken.request.accessToken(){{
             setCode(requestCode);
             setGrant_type("authorization_code");
-            setRedirect_uri(hostUrl+"/callback2");
+            setRedirect_uri(hostUrl+"/test");
             setScope("read");
         }};
         HttpResponse<OauthToken.response> response = Unirest.post(hostUrl+"/oauth/token")
