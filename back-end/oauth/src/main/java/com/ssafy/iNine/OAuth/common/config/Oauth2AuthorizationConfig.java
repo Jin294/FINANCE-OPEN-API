@@ -48,8 +48,8 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-                .authenticationManager(authenticationManager) //클라이언트 인증  클라이언트 애플리케이션의 인증을 확인하고 클라이언트가 제출한 인증 정보가 유효한지 검사. 클라이언트의 신원이 확인되면 OAuth 2.0 인증 서버는 클라이언트에게 액세스 토큰을 발급
-                .userDetailsService(userDetailsService) //인증 서버가 클라이언트 애플리케이션의 사용자 정보를 필요로 할 때 이 설정을 사용하여 사용자 정보를 얻는다. 인증 서버가 사용자의 권한을 확인하거나 사용자의 추가 정보를 가져올 때 userDetailsService를 사용
+                .authenticationManager(authenticationManager) //클라이언트 인증  클라이언트 애플리케이션의 인증을 확인하고 클라이언트가 제출한 인증 정보가 유효한지 검사. 클라이언트의 신원이 확인되면 OAuth 2.0 인증 서버는 클라이언트에게 액세스 토큰을 발급.  grant_type password를 사용하기 위함
+                .userDetailsService(userDetailsService) //인증 서버가 클라이언트 애플리케이션의 사용자 정보를 필요로 할 때 이 설정을 사용하여 사용자 정보를 얻는다. 인증 서버가 사용자의 권한을 확인하거나 사용자의 추가 정보를 가져올 때 userDetailsService를 사용. refrash token 발행시 유저 정보 검사
                 .accessTokenConverter(jwtAccessTokenConverter()); // JWT 토큰 변환기 설정
     }
 
