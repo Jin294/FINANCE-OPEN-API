@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "firm")
+@Table(name = "invest_firm")
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "account")
+@Table(name = "invest_account")
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Account {
