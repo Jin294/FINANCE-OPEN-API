@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,15 @@ public class Controller {
      * 특정 증권사의 계좌목록 조회
      * @return 해당 증권사에 존재하는 나의 계좌목록들
      */
-    @PostMapping("/accounts/{userId}")
-    public ResponseEntity<Map<String, Object>> getAccountsByFirm(@PathVariable String userId, @RequestBody RequestDto requestDto) {
+    @GetMapping("/accounts/{userId}")
+    public ResponseEntity<Map<String, Object>> getAccountsByFirm(@PathVariable String userId, String orgCode, LocalDateTime searchTimeStamp, String nextPage, int limit) {
+        if (searchTimeStamp == null) {
+            searchTimeStamp = LocalDateTime.now();
+        }
+        System.out.println("userId = " + userId + ", orgCode = " + orgCode + ", searchTimeStamp = " + searchTimeStamp + ", nextPage = " + nextPage + ", limit = " + limit);
         Map<String, Object> map = new HashMap<>();
-        List<AccountDto> accounts = service.getAccountsFromSingleFirm(userId, requestDto.getOrgCode());
+        List<AccountDto> accounts = service.getAccountsFromSingleFirm(userId, orgCode);
+//        System.out.println("accounts : " + accounts.get(0));
 
         // rsp_code : 세부 응답코드
         map.put("rsp_code", 0);
@@ -43,7 +49,7 @@ public class Controller {
      * 모든 증권사의 계좌목록을 한 번에 조회
      * @return 금융사에 존재하는 나의 계좌목록들
      */
-    @PostMapping("/myAllAccountnumbers/{userId}")
+    @GetMapping("/myAllAccountnumbers/{userId}")
     public ResponseEntity<Map<String, Object>> getAllAccounts(@PathVariable String userId) {
         Map<String, Object> map = new HashMap<>();
 
@@ -56,13 +62,17 @@ public class Controller {
      * 마이데이터 표준 : /v1/invest/accounts/products
      * 정보주체가 보유한 계좌에 포함된 상품의 조회 시점 기준 상세 정보 조회
      * @param userId 고객 고유번호
-     * @param dto
+     * @param orgCode
+     * @param accountNum
+     * @param searchTimestamp
+     * @param nextPage
+     * @param limit
      * @return
      */
     @PostMapping("/accounts/detail")
-    public ResponseEntity<Map<String, Object>> getAccountDetail(String userId, @RequestBody RequestDto dto) {
+    public ResponseEntity<Map<String, Object>> getAccountDetail(String userId, String orgCode, String accountNum, String searchTimestamp, String nextPage, String limit) {
         Map<String, Object> map = new HashMap<>();
-        List<ProductDto> products = service.getProductsFromRecords(dto.getAccountNum());
+        List<ProductDto> products = service.getProductsFromRecords(accountNum);
 
         map.put("rsp_code", 0);
         map.put("rsp_msg", 0);
@@ -105,18 +115,24 @@ public class Controller {
     /**
      * 마이데이터 표준 : /v1/invest/accounts/transactions
      * fromDate와 toDate 사이의 거래내역 조회
-     * @param requestDto
+     * @param userId
+     * @param orgCode
+     * @param accountNum
+     * @param fromDate
+     * @param toDate
+     * @param nextPage
+     * @param limit
      * @return
      */
     @PostMapping("/transRecord")
-    public ResponseEntity<Map<String, Object>> getTransactions(@RequestBody RequestDto requestDto) {
+    public ResponseEntity<Map<String, Object>> getTransactions(String userId, String orgCode, String accountNum, LocalDateTime fromDate, LocalDateTime toDate, String nextPage, String limit) {
         Map<String, Object> map = new HashMap<>();
 
         List<TransactionRecordDto> list = service.getRecords(
-                requestDto.getOrgCode(),
-                requestDto.getAccountNum(),
-                requestDto.getFromDate(),
-                requestDto.getToDate());
+                orgCode,
+                accountNum,
+                fromDate,
+                toDate);
 
         map.put("rsp_code", 0);
         map.put("rsp_msg", 0);
