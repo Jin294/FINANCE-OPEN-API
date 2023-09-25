@@ -1,7 +1,7 @@
 package com.ssafy.iNine.StockAPI.common.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.ssafy.iNine.FinancialAPI.common.response.CommonResponse;
+import com.ssafy.iNine.StockAPI.common.response.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

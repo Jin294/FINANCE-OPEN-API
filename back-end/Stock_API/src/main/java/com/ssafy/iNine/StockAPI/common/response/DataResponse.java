@@ -1,4 +1,4 @@
-package com.ssafy.iNine.FinancialAPI.common.response;
+package com.ssafy.iNine.StockAPI.common.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

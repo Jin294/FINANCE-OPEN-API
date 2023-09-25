@@ -1,4 +1,4 @@
-package com.ssafy.iNine.FinancialAPI;
+package com.ssafy.iNine.StockAPI;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
