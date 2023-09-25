@@ -50,5 +50,4 @@ public class OAuthClientDetails {
     @JoinColumn(name = "service_provider_id")
     @OneToOne(fetch = FetchType.LAZY)
     private ServiceProvider serviceProvider;
-
 }

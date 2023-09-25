@@ -5,10 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,8 +23,12 @@ import java.util.Collection;
 @Table(name="user")
 public class User implements UserDetails {
     @Id
-    @Column(nullable = true, unique = true, length = 20)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(length = 100)
     private String password;

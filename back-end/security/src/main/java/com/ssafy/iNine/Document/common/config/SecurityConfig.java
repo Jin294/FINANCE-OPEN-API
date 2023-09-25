@@ -37,6 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/docs/service").permitAll()
                 .antMatchers(HttpMethod.POST,"/docs/service/login").permitAll()
+                .antMatchers("/docs/api").permitAll()
+                .antMatchers("/docs/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 //form login 안함

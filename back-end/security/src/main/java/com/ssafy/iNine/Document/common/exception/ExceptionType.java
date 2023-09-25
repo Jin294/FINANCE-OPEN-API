@@ -29,7 +29,9 @@ public enum ExceptionType {
 
     SMS_SEND_FAILED(4400, "인증코드 발송에 실패하였습니다."),
     PHONE_NUMBER_NOT_FOUND(4401, "존재하지 않는 전화번호입니다."),
-    PHONE_AUTH_CODE_NOT_MATCH(4402, "전화번호 인증코드가 틀렸습니다.");
+    PHONE_AUTH_CODE_NOT_MATCH(4402, "전화번호 인증코드가 틀렸습니다."),
+
+    API_NOT_FOUND(4500, "api가 존재하지 않습니다.");
 
     private final int code;
     private final String message;
