@@ -229,7 +229,7 @@
             passwordbutton.hidden = !passwordbutton.hidden
             emailBack.hidden = !emailBack.hidden
 
-            axios.get(`http://j9b309.p.ssafy.io/oauth/user/email/${email.value}`).then((res) => {
+            axios.get(`https://j9b309.p.ssafy.io/oauth/user/email/${email.value}`).then((res) => {
                 console.log(res)
             })
         })
