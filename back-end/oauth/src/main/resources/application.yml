@@ -35,4 +35,7 @@ server:
 url:
   host: https://j9b309.p.ssafy.io
 
+RSA:
+  privatekey: i9ssafyi91234!!!
+
 

@@ -3,6 +3,7 @@ package com.ssafy.iNine.OAuth.common.config;
 import com.ssafy.iNine.OAuth.common.authentication.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +26,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Value("${url.host}")
+    private String hostUrl;
+
+
     private final CustomAuthenticationProvider customAuthenticationProvider;
     @Bean
     @Override
@@ -58,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
                         log.info("login fail");
-                        response.sendRedirect("http://localhost:8085/oauth/login?error=true");
+                        response.sendRedirect(hostUrl+"/oauth/login?error=true");
                     }
                 })
                 .permitAll()
