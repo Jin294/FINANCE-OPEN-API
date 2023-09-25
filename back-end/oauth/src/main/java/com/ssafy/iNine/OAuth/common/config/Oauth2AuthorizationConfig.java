@@ -32,23 +32,25 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Value("${RSA.privatekey}")
     private String privateKey;
 
+    //OAuth2.0 인증 서버 보안 설정
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.tokenKeyAccess("permitAll()") // 토큰유효성(/token/check_token) 접근을 위해 설정 모두 허용하지 않으면 해당 서버에서 토큰 접근이 불가능 하여 토큰을 DB에서 찾을 수 없다.
-                .allowFormAuthenticationForClients();
+                .allowFormAuthenticationForClients(); //클라이언트 애플리케이션 폼 인증 허용
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        //client 정보를 데이터베이스에서 가져오도록 설정 dataSource를 사용하여 클라이언트 정보 로드
         clients.jdbc(dataSource);
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-                .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService)
-                .accessTokenConverter(jwtAccessTokenConverter());
+                .authenticationManager(authenticationManager) //클라이언트 인증  클라이언트 애플리케이션의 인증을 확인하고 클라이언트가 제출한 인증 정보가 유효한지 검사. 클라이언트의 신원이 확인되면 OAuth 2.0 인증 서버는 클라이언트에게 액세스 토큰을 발급
+                .userDetailsService(userDetailsService) //인증 서버가 클라이언트 애플리케이션의 사용자 정보를 필요로 할 때 이 설정을 사용하여 사용자 정보를 얻는다. 인증 서버가 사용자의 권한을 확인하거나 사용자의 추가 정보를 가져올 때 userDetailsService를 사용
+                .accessTokenConverter(jwtAccessTokenConverter()); // JWT 토큰 변환기 설정
     }
 
     @Bean
