@@ -19,9 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -96,6 +94,15 @@ public class ServiceProviderService {
         userRepository.modifyPassword(userId, passwordEncoder.encode(password));
     }
 
+    public List<OAuthClientDetailsDto.OAuthClientInfo> getOAuthClient(Long userId) {
+        List<OAuthClientDetails> oAuthClientDetailsList = oAuthClientDetailsRepository.getOAuthClientDetailsByClient(userId);
+        List<OAuthClientDetailsDto.OAuthClientInfo> clientInfoList = new ArrayList<>();
+        oAuthClientDetailsList.forEach((oAuthClientDetails -> {
+            clientInfoList.add(OAuthClientDetailsDto.OAuthClientInfo.of(oAuthClientDetails));
+        }));
+
+        return clientInfoList;
+    }
 
     public void setOAuthClient(Long userId, OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
         ServiceProvider serviceProvider = userRepository.findById(userId)
@@ -105,7 +112,8 @@ public class ServiceProviderService {
         OAuthClientDetails oAuthClientDetails = OAuthClientDetails.builder()
                 .clientId(String.valueOf(UUID.randomUUID()))
                 .accessTokenValidity(36000)
-                .authorizedGrantTypes("authorization_code,implicit,password,client_credentials,refresh_token")
+//                .authorizedGrantTypes("authorization_code,implicit,password,client_credentials,refresh_token")
+                .authorizedGrantTypes("authorization_code")
                 .scope("read, write")
                 .autoapprove("false")
                 .clientSecret(JwtUtil.generateSecretKey(serviceProvider.getEmail(), oAuthClientRegistForm.getWeb_server_redirect_uri()))

@@ -12,4 +12,7 @@ import java.util.Optional;
 
 public interface ApiRepository extends JpaRepository<Api, Long> {
     List<Api> findAll();
+
+    @Query("SELECT a FROM Api a JOIN FETCH a.apiData WHERE a.apiDocsId = :apiId")
+    Optional<Api> getApiById(@Param("apiId") Long apiId);
 }

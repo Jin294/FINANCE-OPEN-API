@@ -31,7 +31,9 @@ public enum ExceptionType {
     PHONE_NUMBER_NOT_FOUND(4401, "존재하지 않는 전화번호입니다."),
     PHONE_AUTH_CODE_NOT_MATCH(4402, "전화번호 인증코드가 틀렸습니다."),
 
-    API_NOT_FOUND(4500, "api가 존재하지 않습니다.");
+    API_NOT_FOUND(4500, "api가 존재하지 않습니다."),
+
+    CLIENT_NOT_FOUND(4600, "api를 등록한 클라이언트가 없습니다");
 
     private final int code;
     private final String message;

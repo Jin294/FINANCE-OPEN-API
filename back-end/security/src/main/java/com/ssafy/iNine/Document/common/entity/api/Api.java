@@ -4,6 +4,7 @@ import com.ssafy.iNine.Document.domain.api.dto.ApiDocsDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,7 @@ public class Api {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "api_docs_id")
-    private Long apiDocsApi;
+    private Long apiDocsId;
 
     private String title;
     private String content;
@@ -27,6 +28,6 @@ public class Api {
     @Column(name="content_type")
     private String contentType;
     private String authorization;
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<ApiData> apiData;
+    @OneToMany(mappedBy = "api", fetch = FetchType.LAZY)
+    private List<ApiData> apiData = new ArrayList<>();
 }

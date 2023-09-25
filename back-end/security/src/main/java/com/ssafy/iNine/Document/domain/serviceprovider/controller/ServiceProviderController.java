@@ -5,11 +5,13 @@ import com.ssafy.iNine.Document.domain.serviceprovider.dto.ServiceProviderDto;
 import com.ssafy.iNine.Document.domain.serviceprovider.service.ServiceProviderService;
 import com.ssafy.iNine.Document.common.response.CommonResponse;
 import com.ssafy.iNine.Document.common.response.DataResponse;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -46,11 +48,18 @@ public class ServiceProviderController {
         return new CommonResponse(200, "success");
     }
 
-    @PutMapping("/client")
+    @PostMapping("/client")
     public CommonResponse setClient(Principal principal, @RequestBody OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
         Long serviceProviderId = Long.parseLong(principal.getName());
         serviceProviderService.setOAuthClient(serviceProviderId, oAuthClientRegistForm);
         return new CommonResponse(200, "success");
+    }
+
+    @GetMapping("/client")
+    public DataResponse<?> getClient(Principal principal) {
+        Long serviceProviderId = Long.parseLong(principal.getName());
+        List<OAuthClientDetailsDto.OAuthClientInfo> data = serviceProviderService.getOAuthClient(serviceProviderId);
+        return new DataResponse<>(200, "success", data);
     }
 
     @PostMapping("/token")

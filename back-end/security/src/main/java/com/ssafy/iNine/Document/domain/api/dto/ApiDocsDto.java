@@ -21,7 +21,7 @@ public class ApiDocsDto {
 
         public static Info of(Api api) {
             return Info.builder()
-                    .apiDocsId(api.getApiDocsApi())
+                    .apiDocsId(api.getApiDocsId())
                     .title(api.getTitle())
                     .content(api.getContent())
                     .build();
@@ -45,7 +45,7 @@ public class ApiDocsDto {
 
         public static DetailInfo of(Api api, List<ApiData> apiData) {
             return DetailInfo.builder()
-                    .apiDocsId(api.getApiDocsApi())
+                    .apiDocsId(api.getApiDocsId())
                     .title(api.getTitle())
                     .authorization(api.getAuthorization())
                     .content(api.getContent())

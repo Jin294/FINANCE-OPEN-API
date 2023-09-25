@@ -31,7 +31,7 @@ public class ApiService {
     }
 
     public ApiDocsDto.DetailInfo getDetailInfo(Long apiId) {
-        Api api = apiRepository.findById(apiId).orElseThrow(()-> {
+        Api api = apiRepository.getApiById(apiId).orElseThrow(()-> {
             return new CommonException(ExceptionType.API_NOT_FOUND);
         });
         List<ApiDocsDto.ApiData> apiDataList = new ArrayList<>();
