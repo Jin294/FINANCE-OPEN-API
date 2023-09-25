@@ -65,7 +65,7 @@ public class OAuthController {
         OauthToken.request.accessToken request = new OauthToken.request.accessToken(){{
             setCode(requestCode);
             setGrant_type("authorization_code");
-            setRedirect_uri(hostUrl+"/test");
+            setRedirect_uri(hostUrl+"/oauth/test");
             setScope("read");
         }};
         HttpResponse<OauthToken.response> response = Unirest.post(hostUrl+"/oauth/token")
