@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+//@RequiredArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class ApiService {
     private final ApiRepository apiRepository;
 
