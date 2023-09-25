@@ -20,6 +20,6 @@ public class TransactionRecordDto {
     private double transAmt; // 거래금액 (해당종목이 본 거래에서 거래된 총 금액)
     private double settleAmt; // 정산금액 (거래대금에서 제세공과금 등을 차감한 금액)
     private double balanceAmt; // 거래후잔액 (해당 계좌의 현금 잔액(예수금))
-    private String currencyCode = "KRW"; // 거래에 적용된 통화코드 (통화코드값이 명시되어있지 않을 경우 "KRW"(원))
+    private String currencyCode; // 거래에 적용된 통화코드 (통화코드값이 명시되어있지 않을 경우 "KRW"(원))
     private String exCode; // 해외주식 거래소 코드
 }
