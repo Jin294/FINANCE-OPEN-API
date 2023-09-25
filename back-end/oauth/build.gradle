@@ -36,7 +36,6 @@ dependencies {
 	implementation 'com.konghq:unirest-java:3.7.02'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.springframework.security:spring-security-jwt:1.1.1.RELEASE' // jwt 토큰 방식을 쓰기위해 필요한 라이브러리
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 

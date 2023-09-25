@@ -2,6 +2,8 @@ package com.ssafy.iNine.OAuth.common.config;
 
 import com.ssafy.iNine.OAuth.common.authentication.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,13 +11,25 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Value("${url.host}")
+    private String hostUrl;
+
+
     private final CustomAuthenticationProvider customAuthenticationProvider;
     @Bean
     @Override
@@ -24,7 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
         return NoOpPasswordEncoder.getInstance();
     }
     // 커스텀 인증 : 어떤 사용자인지 확인하는 메소드 커스텀
@@ -41,30 +54,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/js/**").permitAll()
                 .antMatchers("/oauth/user/email/**").permitAll()
+                .antMatchers("/oauth/style.css").permitAll()
+                .antMatchers("/oauth/login/**").permitAll()
                 .anyRequest().authenticated().and()
                 .formLogin()
                 .loginPage("/oauth/login")
+                .failureHandler(new AuthenticationFailureHandler() {
+                    @Override
+                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+                        log.info("login fail");
+                        response.sendRedirect(hostUrl+"/oauth/login?error=true");
+                    }
+                })
                 .permitAll()
                 .and()
                 .httpBasic();
-//        http
-//                //csrf 허용 안함
-//                .csrf().disable()
-//                .headers().disable()
-//                .cors().and()
-//                //로그인과 회원가입에는 모두 허용 그 외에 모든 요청에 대해서 토큰 검사한다.
-//                .authorizeRequests()
-//                .antMatchers("/oauth/authorize").authenticated()
-//                .antMatchers("/oauth/token").permitAll()
-//                .antMatchers("/oauth/token/**").permitAll()
-//                .anyRequest().permitAll()
-//                .and()
-//                .formLogin()
-////                .loginPage("/user/login")
-////                .defaultSuccessUrl("/user/auth")
-//                .permitAll()
-////                .formLogin().permitAll()
-//                .and()
-//                .httpBasic();
     }
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.provider.AuthorizationRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.util.Map;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/oauth")
 public class UserController {
     private final UserDetailService userDetailService;
     private final UserService userService;
@@ -23,7 +25,7 @@ public class UserController {
     public String confirm(HttpServletRequest request){
         AuthorizationRequest authorizationRequest = (AuthorizationRequest) request.getSession().getAttribute("authorizationRequest");
         log.info("clientid:{}", authorizationRequest.getClientId());
-        return "confirm";
+        return "confirmForm";
     }
 
     /**
@@ -39,21 +41,12 @@ public class UserController {
         return new CommonResponse(200, "이메일 인증 요청 성공");
     }
 
-    /**
-     * 이메일 코드 인증 API (인증코드 확인)
-     *
-     * @param request 이메일, 인증코드
-     * @return Only code and message
-     */
-    @PostMapping("/user/emailauth")
-    public CommonResponse checkEmail(@RequestBody Map<String, String> request) {
-        userService.validateEmailCode(request.get("email"), request.get("authCode"));
-        return new CommonResponse(200, "이메일 인증 성공");
-    }
-
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(value = "error", required = false)String error, Model model) {
         log.info("login form");
+        if(error != null && error.equals("true")) {
+            model.addAttribute("loginfail", true);
+        }
 //        return "login"; // login.html 또는 login.jsp와 같은 로그인 페이지 템플릿의 이름을 반환합니다.
         return "loginForm";
     }

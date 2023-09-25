@@ -3,31 +3,44 @@ package com.ssafy.iNine.OAuth.domain.user.service;
 import com.ssafy.iNine.OAuth.common.entity.user.User;
 import com.ssafy.iNine.OAuth.common.exception.CommonException;
 import com.ssafy.iNine.OAuth.common.exception.ExceptionType;
-import com.ssafy.iNine.OAuth.domain.user.dto.EmailAuthDto;
-import com.ssafy.iNine.OAuth.domain.user.repository.EmailRepository;
 import com.ssafy.iNine.OAuth.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Transactional
 public class UserService {
-    private final EmailRepository emailRepository;
     private final JavaMailSender javaMailSender;
     private final UserRepository userRepository;
     public void sendEmail(String email) {
         long verifiedCode = Math.round(100000 + Math.random() * 899999);
-        if (emailRepository.findByEmail(email).isPresent()) {
-            EmailAuthDto emailAuthDto = emailRepository.findByEmail(email)
-                    .orElseThrow(() -> new CommonException(ExceptionType.EMAIL_NOT_FOUND));
-            emailRepository.delete(emailAuthDto);
+        Optional<User> user = userRepository.findById(email);
+        if(user.isPresent()) {
+            log.info("user is present");
+            userRepository.setUserPassword(Long.toString(verifiedCode), user.get().getId());
+            userRepository.setAuthSendTime(LocalDateTime.now(), user.get().getId());
         }
-        insertCode(email, Long.toString(verifiedCode));
+        else {
+            log.info("user is not present");
+            User newUser = User.builder()
+                    .id(email)
+                    .password(Long.toString(verifiedCode))
+                    .nickname(email)
+                    .state("Y")
+                    .authSendTime(LocalDateTime.now())
+                    .build();
+            userRepository.save(newUser);
+        }
 
         MimeMessageHelper messageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), "UTF-8");
         try {
@@ -57,32 +70,5 @@ public class UserService {
             e.printStackTrace();
             throw new CommonException(ExceptionType.EMAIL_SEND_FAIL);
         }
-    }
-
-    public void validateEmailCode(String email, String authCode) {
-        EmailAuthDto emailAuthDto = emailRepository.findByEmail(email)
-                .orElseThrow(() -> new CommonException(ExceptionType.EMAIL_NOT_FOUND));
-
-        if (!emailAuthDto.getKey().equals(authCode)) {
-            throw new CommonException(ExceptionType.EMAIL_CODE_NOT_MATCH);
-        }
-        emailRepository.delete(emailAuthDto);
-        Optional<User> user = userRepository.findById(email);
-        if(user.isPresent()) {
-            userRepository.setUserPassword(authCode, user.get().getId());
-        }
-        else {
-            User newUser = User.builder()
-                    .id(email)
-                    .password("{noop}"+authCode)
-                    .state("Y")
-                    .build();
-            userRepository.save(newUser);
-        }
-    }
-
-    public void insertCode(String email, String code) {
-        EmailAuthDto emailAuthDto = new EmailAuthDto(email, code);
-        emailRepository.save(emailAuthDto);
     }
 }

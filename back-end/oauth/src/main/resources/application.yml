@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/i9?serverTimezone=UTC
-    username: root
-    password: ssafy
+    url: jdbc:mysql://j9b309.p.ssafy.io:3306/i9?serverTimezone=UTC
+    username: i9B309
+    password: ***REMOVED***
   jpa: # DB 쿼리 작성 없이 코드로 쉽게 데이터 처리를 위함.
     show-sql: true
     database: mysql
@@ -12,28 +12,30 @@ spring:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
+
   mail:
     host: smtp.gmail.com
     port: 587
     username: ***REMOVED***
-    password: ppxz mzou cxfd mifm
+    password: ***REMOVED***
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-  data:
-    mongodb:
-      uri: mongodb+srv://S09P13B304:ssafy@ssafy.ngivl.mongodb.net/S09P13B304?authSource=admin
-#  main:
-#    allow-bean-definition-overriding: true # userDetailService 기존 스프링 제공 함수 안쓰고 정의 함수로 바꾸기 위한 설정
+
 server:
-  port: 8085 # 사용 포트
+  port: 8087 # 사용 포트
   tomcat:
     accesslog:
       enabled: true # access 로그 추가
     basedir: .
 
+url:
+  host: https://j9b309.p.ssafy.io
+
+RSA:
+  privatekey: i9ssafyi91234!!!
 
 

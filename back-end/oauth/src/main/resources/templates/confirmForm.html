@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-<!--    <link rel="stylesheet" href="style.css">-->
+    <title>허가</title>
+    <link rel="stylesheet" href="style.css">
     <style>
                 :root{
 
@@ -177,70 +177,22 @@
             <p>이메일 인증을 하면 개인 사용자별 가상 마이데이터를 제공하고 있습니다.</p>
         </div>
         <div class="login-form-left-side">
-            <form action="/oauth/login" method="post">
+            <form action="/oauth/authorize" method="post">
                 <div class="login-input-container" >
-                    <div class="login-input-wrap input-id" id="email-wrap" >
-                        <i class="far fa-envelope"></i>
-                        <input placeholder="Email" type="text" name="username" id="email">
+                    <div class="input-id" id="email-wrap" >
+                        <input type="hidden" class="form-control" name="scope.read" value="true">
+                        <input type="hidden" class="form-control" name="scope. write" value="true">
+                        <input type="hidden" class="form-control" name="user_oauth_approval" value="true">
                     </div>
                     <div class="login-btn-wrap" >
-                        <button type="button" class="login-btn" id="email-button">이메일로 인증번호 보내기</button>
-                    </div>
-                    <div class="login-input-wrap input-password" id="password-wrap" hidden>
-                        <i class="fas fa-key"></i>
-                        <input placeholder="Password"  type="password" name="password" >
-                    </div>
-                    <div class="login-btn-wrap">
-                        <button class="login-btn" type="submit" id="password-button" hidden>사용자 인증하기</button>
-                        <a style="cursor: pointer" id="email-back" hidden>이메일 다시 입력하기</a>
+                        <button type="submit" class="login-btn" id="email-button">권한 동의하겠습니까?</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<div th:if="${loginfail}">
-    <!-- 조건이 true일 때 JavaScript alert를 호출합니다 -->
-    <script th:inline="javascript">
-            alert('입력번호가 잘못되었습니다. 다시 이메일 인증을 해주세요.');
-        </script>
-</div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!--<script src="/js/login.js"></script>-->
-<script>
-    const emailButton = document.getElementById("email-button");
-        const emailWrap = document.getElementById("email-wrap");
-        const passwordWrap = document.getElementById("password-wrap");
-        const passwordbutton = document.getElementById("password-button");
-        const emailBack = document.getElementById("email-back");
-        const email = document.getElementById("email")
-        const password = document.getElementById("password")
-
-        emailButton.addEventListener("click", () => {
-            console.log(email.value)
-            if(email.value.trim() == "") {
-                alert("이메일을 입력해주세요")
-                return
-            }
-            emailButton.hidden = !emailButton.hidden
-            emailWrap.hidden = !emailWrap.hidden
-            passwordWrap.hidden = !passwordWrap.hidden
-            passwordbutton.hidden = !passwordbutton.hidden
-            emailBack.hidden = !emailBack.hidden
-
-            axios.get(`https://j9b309.p.ssafy.io/oauth/user/email/${email.value}`).then((res) => {
-                console.log(res)
-            })
-        })
-
-        emailBack.addEventListener("click", () => {
-            emailButton.hidden = !emailButton.hidden
-            emailWrap.hidden = !emailWrap.hidden
-            passwordWrap.hidden = !passwordWrap.hidden
-            passwordbutton.hidden = !passwordbutton.hidden
-            emailBack.hidden = !emailBack.hidden
-        })
-
-</script>
 </body>
 </html>

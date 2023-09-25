@@ -4,12 +4,16 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import com.ssafy.iNine.OAuth.domain.oauth.dto.OauthToken;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/oauth")
 public class OAuthController {
+    @Value("${url.host}")
+    private String hostUrl;
 
     // 클라이언트가 구현해야하는 코드 - 발급 받은 코드로 토큰 발행
     @RequestMapping("/callback")
@@ -24,18 +28,11 @@ public class OAuthController {
         OauthToken.request.accessToken request = new OauthToken.request.accessToken(){{
             setCode(requestCode);
             setGrant_type("authorization_code");
-            setRedirect_uri("http://localhost:8085/callback");
+            setRedirect_uri(hostUrl+"/callback");
             setScope("read");
         }};
 
-        //oauth 서버에 http 통신으로 토큰 발행
-//        OauthToken.response oauthToken = (OauthToken.response) Unirest.post("http://localhost:8085/oauth/token")
-//                .header("Authorization","Basic "+encodingCredentials)
-//                .fields(request.getMapData())
-//                .asObject(OauthToken.response.class).getBody();
-//        System.out.println(oauthToken);
-
-        HttpResponse<OauthToken.response> response = Unirest.post("http://localhost:8085/oauth/token")
+        HttpResponse<OauthToken.response> response = Unirest.post(hostUrl+"/oauth/token")
                 .header("Authorization", "Basic " + encodingCredentials)
                 .fields(request.getMapData())
                 .asObject(OauthToken.response.class);
@@ -56,10 +53,10 @@ public class OAuthController {
         return oauthToken;
     }
 //http://localhost:8085/oauth/authorize?response_type=code&client_id=79c85820-6ed5-4c99-a9d8-22c68374883b&redirect_uri=http://localhost:8085/callback2&scope=read
-    @RequestMapping("/callback2")
+    @RequestMapping("/test")
     public OauthToken.response code2(@RequestParam String code)  {
 
-        String cridentials = "79c85820-6ed5-4c99-a9d8-22c68374883b:eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjk1MDg5MzE4MzQ4LCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFAbmF2ZXIuY29tIiwicmVkaXJlY3RVcmkiOiJodHRwOi8vbG9jYWxob3N0OjgwODUvY2FsbGJhY2siLCJleHAiOjE3MjY2MjUzMTgsInN1YiI6ImFwaS10b2tlbiJ9.XPIZzR6pJKXtIxboYYiT9AlOpYRkTbRVgS6mRjg0FtQ";
+        String cridentials = "test:test";
         // base 64로 인코딩 (basic auth 의 경우 base64로 인코딩 하여 보내야한다.)
         String encodingCredentials = new String(
                 Base64.encodeBase64(cridentials.getBytes())
@@ -68,18 +65,10 @@ public class OAuthController {
         OauthToken.request.accessToken request = new OauthToken.request.accessToken(){{
             setCode(requestCode);
             setGrant_type("authorization_code");
-            setRedirect_uri("http://localhost:8085/callback2");
+            setRedirect_uri(hostUrl+"/oauth/test");
             setScope("read");
         }};
-
-        //oauth 서버에 http 통신으로 토큰 발행
-//        OauthToken.response oauthToken = (OauthToken.response) Unirest.post("http://localhost:8085/oauth/token")
-//                .header("Authorization","Basic "+encodingCredentials)
-//                .fields(request.getMapData())
-//                .asObject(OauthToken.response.class).getBody();
-//        System.out.println(oauthToken);
-
-        HttpResponse<OauthToken.response> response = Unirest.post("http://localhost:8085/oauth/token")
+        HttpResponse<OauthToken.response> response = Unirest.post(hostUrl+"/oauth/token")
                 .header("Authorization", "Basic " + encodingCredentials)
                 .fields(request.getMapData())
                 .asObject(OauthToken.response.class);

@@ -29,7 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
-        log.error("username, password : {}, {}", username, password);
+        log.info("username, password : {}, {}", username, password);
         UserDetails info = userDetailService.loadUserByUsername(username);
         log.info("user info:{}", info.getUsername());
         if(ObjectUtils.isEmpty(info)){
@@ -38,6 +38,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if(!StringUtils.equals(password, StringUtils.replace(info.getPassword(), "{noop}",""))){
             throw new UsernameNotFoundException("please password check");
         }
+        log.info("login success");
         return new UsernamePasswordAuthenticationToken(username,password,authentication.getAuthorities());
     }
 }

@@ -102,6 +102,5 @@ public class ServiceProviderService {
 
         if(oAuthClientRegistForm.getAdditional_information() != null) oAuthClientDetails.setAdditionalInformation(oAuthClientRegistForm.getAdditional_information());
         oAuthClientDetailsRepository.save(oAuthClientDetails);
-//        userRepository.setClient(serviceProvider.getServiceProviderId(), oAuthClientDetails);
     }
 }
