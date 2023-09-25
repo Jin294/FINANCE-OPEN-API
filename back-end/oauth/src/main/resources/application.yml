@@ -33,6 +33,6 @@ server:
     basedir: .
 
 url:
-  host: http://j9b309.p.ssafy.io/
+  host: https://j9b309.p.ssafy.io/
 
 
