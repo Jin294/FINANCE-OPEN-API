@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/invest")
+@RequestMapping("/invest")
 @RequiredArgsConstructor
 public class Controller {
 
@@ -34,8 +34,8 @@ public class Controller {
 //        System.out.println("accounts : " + accounts.get(0));
 
         // rsp_code : 세부 응답코드
-        map.put("rsp_code", 0);
-        map.put("rsp_msg", 0);
+        map.put("rsp_code", 00000);
+        map.put("rsp_msg", "성공");
         map.put("search_timestamp", 0);
         map.put("next_page", 0);
         map.put("account_cnt", accounts.size());
