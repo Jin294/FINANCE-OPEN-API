@@ -1,5 +1,7 @@
 package com.ssafy.iNine.StockAPI.service;
 
+import com.ssafy.iNine.StockAPI.domain.Account;
+import com.ssafy.iNine.StockAPI.domain.Firm;
 import com.ssafy.iNine.StockAPI.domain.Product;
 import com.ssafy.iNine.StockAPI.domain.TransactionRecord;
 import com.ssafy.iNine.StockAPI.dto.AccountDto;
@@ -12,12 +14,13 @@ import com.ssafy.iNine.StockAPI.repository.ProductRepository;
 import com.ssafy.iNine.StockAPI.repository.TransactionRecordRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Month;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.lang.Math.*;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
@@ -27,6 +30,8 @@ public class Service {
     private final ProductRepository productRepository;
     private final AccountRepository accountRepository;
     private final TransactionRecordRepository recordRepository;
+
+    private static Random random = new Random();
 
     /**
      * 고객번호와 단일 증권사가 일치하는 복수의 증권계좌를 가져온다
@@ -41,7 +46,7 @@ public class Service {
         return accountRepository.findByUserIdAndFirmCode(userId, firmCode).stream()
                 .map(account -> {
                     AccountDto dto = new AccountDto();
-                    dto.setAccountNumber(account.getAccountNumber());
+                    dto.setAccountNumber(String.valueOf(account.getAccountNumber()));
                     dto.setConsent(account.isConsent());
                     dto.setAccountName(account.getAccountName());
                     dto.setAccountType(account.getAccountType());
@@ -175,5 +180,77 @@ public class Service {
         // Map에 저장된 ProductDto 객체들을 List로 변환하여 반환
         List<ProductDto> productDtoList = new ArrayList<>(productDtoMap.values());
         return productDtoList;
+    }
+
+    public void makeData(){
+    }
+
+    // 신규 계좌 생성
+    public void makeAccount(String userId){
+        List<String> firmCode = firmRepository.findAllFirmCode();
+        int len = firmCode.size();
+
+        Account accountTemplate = Account.builder()
+                .userId(userId)
+                .firmCode(firmCode.get((int) (random() * len)))
+
+                .accountNumber(UUID.randomUUID())
+                .isConsent(false)
+                .accountType("101")
+                .issueDate(LocalDateTime.now())
+                .isTaxBenefits(false)
+                .build();
+
+        accountTemplate.setAccountName(firmRepository.getFirmName(accountTemplate.getFirmCode()) + (random() * 100 + 1));
+        accountRepository.save(accountTemplate);
+    }
+
+    // 신규 거래내역을 100개 생성
+    public void makeRecords(String userId, String firmCode, String accountNumber){
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        List<Product> productList = productRepository.findAll();
+        int len = productList.size();
+
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < 100; i++) {
+            now = now.plusSeconds((long)(random() * 1800 + 1));
+
+            if (now.getHour() < 9 || now.getHour() >= 16 ) {
+                continue;
+            }
+
+            if (now.getHour() == 15 && now.getMinute() > 30) {
+                continue;
+            }
+
+            Product product = productList.get((int) (random() * len));
+            int transNum = random.nextInt(10) + 1;
+            int baseAmt = (random.nextInt(100) + 1) * 1000;
+            int total = transNum * baseAmt;
+            double remain = account.getRemainAmt();
+            if (remain - transNum * baseAmt < 0) {
+                break;
+            }
+
+            TransactionRecord tmp = TransactionRecord.builder()
+                    .userId(userId)
+                    .orgCode(firmCode)
+                    .accountNumber(accountNumber)
+
+                    .prodName(product.getProdName())
+                    .prodCode(product.getProdCode())
+                    .transDtime(now)
+                    .transNo(String.valueOf(now))
+                    .transType("305")
+                    .transTypeDetail("")
+                    .transNum(transNum)
+                    .baseAmt(baseAmt)
+                    .transAmt(total)
+                    .settleAmt(total)
+                    .balanceAmt(account.getRemainAmt())
+                    .build();
+
+            recordRepository.save(tmp);
+        }
     }
 }

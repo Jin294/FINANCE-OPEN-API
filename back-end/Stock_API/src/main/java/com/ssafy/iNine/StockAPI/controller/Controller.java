@@ -49,8 +49,8 @@ public class Controller {
      * 모든 증권사의 계좌목록을 한 번에 조회
      * @return 금융사에 존재하는 나의 계좌목록들
      */
-    @GetMapping("/myAllAccountnumbers/{userId}")
-    public ResponseEntity<Map<String, Object>> getAllAccounts(@PathVariable String userId) {
+    @GetMapping("/allAccounts/{userId}")
+    public ResponseEntity<Map<String, Object>> getAllAccounts(@PathVariable("userId") String userId) {
         Map<String, Object> map = new HashMap<>();
 
         // myAccounts 내에 증권사 코드별로 계좌번호가 취합됨
@@ -74,8 +74,8 @@ public class Controller {
         Map<String, Object> map = new HashMap<>();
         List<ProductDto> products = service.getProductsFromRecords(accountNum);
 
-        map.put("rsp_code", 0);
-        map.put("rsp_msg", 0);
+        map.put("rsp_code", 00000);
+        map.put("rsp_msg", "성공");
         map.put("search_timestamp", 0);
         map.put("next_page", 0);
         map.put("base_date", 0);
@@ -134,8 +134,8 @@ public class Controller {
                 fromDate,
                 toDate);
 
-        map.put("rsp_code", 0);
-        map.put("rsp_msg", 0);
+        map.put("rsp_code", 00000);
+        map.put("rsp_msg", "성공");
         map.put("trans_cnt", list.size());
         map.put("trans_list", list);
 

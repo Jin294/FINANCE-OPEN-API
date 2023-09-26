@@ -11,6 +11,7 @@ public interface FirmRepository extends JpaRepository<Firm, String> {
     @Query("SELECT f.firmCode FROM Firm f")
     List<String> findAllFirmCode();
 
-    @Query(nativeQuery = true, value = "SELECT * FROM firm WHERE idx = FLOOR(1 + RAND() * 39)")
-    Firm getSingleRandomFirmCode();
+    // 매개변수 firmCode는 :firmCode와 연결된다
+    @Query("SELECT f.firmName FROM Firm f where f.firmCode = :firmCode")
+    String getFirmName(String firmCode);
 }
