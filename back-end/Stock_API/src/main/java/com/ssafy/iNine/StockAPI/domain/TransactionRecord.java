@@ -1,6 +1,9 @@
 package com.ssafy.iNine.StockAPI.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -9,6 +12,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "invest_transaction_record")
+@Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class TransactionRecord {
     private String userId;
     private String orgCode; // 증권사코드

@@ -1,6 +1,7 @@
 package com.ssafy.iNine.StockAPI.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "invest_product")
 @Getter
+@Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Product {
@@ -22,6 +24,6 @@ public class Product {
 
     @Nullable
     private String exCode; // 해외주식 거래소 코드(해외주식 한정)
-    private String prodName; // 종목명 (해당 계좌에 보유하고 있는 상품명칭
+    private String prodName; // 종목명 (해당 계좌에 보유하고 있는 상품명칭)
     private String currencyCode; // 통화코드 (해당 상품에 적용된 통화코드)
 }
