@@ -18,6 +18,13 @@ public class Controller {
 
     private final Service service;
 
+    @GetMapping("/test/{userId}")
+    public ResponseEntity<Map<String, Object>> test(@PathVariable String userId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("ok", "ok-response");
+        return ResponseEntity.ok(map);
+    }
+
     /**
      * 마이데이터 표준 : /v1/invest/accounts
      * 특정 증권사의 계좌목록 조회
@@ -128,11 +135,7 @@ public class Controller {
     public ResponseEntity<Map<String, Object>> getTransactions(String userId, String orgCode, String accountNum, LocalDateTime fromDate, LocalDateTime toDate, String nextPage, String limit) {
         Map<String, Object> map = new HashMap<>();
 
-        List<TransactionRecordDto> list = service.getRecords(
-                orgCode,
-                accountNum,
-                fromDate,
-                toDate);
+        List<TransactionRecordDto> list = service.getRecords(orgCode, accountNum, fromDate, toDate);
 
         map.put("rsp_code", 00000);
         map.put("rsp_msg", "성공");
