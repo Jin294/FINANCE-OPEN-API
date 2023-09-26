@@ -8,6 +8,7 @@ import java.security.Principal;
 
 @Slf4j
 @RestController
+@RequestMapping("/api")
 public class ResourceController {
 
     @RequestMapping("/main")
