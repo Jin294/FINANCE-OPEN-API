@@ -26,7 +26,7 @@ public class OAuthClientDetailsDto {
         private String additional_information;
         private String client_id;
         private String scope;
-        private String authorizedGrantTypes;
+        private String authorized_grant_types;
 
         public static OAuthClientInfo of(OAuthClientDetails oAuthClientDetails) {
             return OAuthClientInfo.builder()
@@ -34,7 +34,7 @@ public class OAuthClientDetailsDto {
                     .additional_information(oAuthClientDetails.getAdditionalInformation())
                     .client_id(oAuthClientDetails.getClientId())
                     .scope(oAuthClientDetails.getScope())
-                    .authorizedGrantTypes(oAuthClientDetails.getAuthorizedGrantTypes())
+                    .authorized_grant_types(oAuthClientDetails.getAuthorizedGrantTypes())
                     .build();
         }
     }
