@@ -35,6 +35,7 @@ dependencies {
 	// jsoup HTML parser library @ https://jsoup.org/
 	implementation 'org.jsoup:jsoup:1.16.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 tasks.named('test') {

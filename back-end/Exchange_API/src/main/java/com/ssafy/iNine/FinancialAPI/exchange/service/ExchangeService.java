@@ -4,10 +4,7 @@ import com.ssafy.iNine.FinancialAPI.common.exception.CommonException;
 import com.ssafy.iNine.FinancialAPI.common.exception.ExceptionType;
 import com.ssafy.iNine.FinancialAPI.entity.Country;
 import com.ssafy.iNine.FinancialAPI.entity.Exchange;
-import com.ssafy.iNine.FinancialAPI.exchange.dto.Bank;
-import com.ssafy.iNine.FinancialAPI.exchange.dto.BankDto;
-import com.ssafy.iNine.FinancialAPI.exchange.dto.CountryDto;
-import com.ssafy.iNine.FinancialAPI.exchange.dto.ExchangeDto;
+import com.ssafy.iNine.FinancialAPI.exchange.dto.*;
 import com.ssafy.iNine.FinancialAPI.exchange.repository.CountryRepository;
 import com.ssafy.iNine.FinancialAPI.exchange.repository.ExchangeRepository;
 import lombok.RequiredArgsConstructor;
@@ -254,7 +251,14 @@ public class ExchangeService {
         return map;
     }
 
-
+    public List<BankDto> getBankList() {
+        List<Bank> bankList = Arrays.asList(Bank.values());
+        List<BankDto> banks = new ArrayList<>();
+        for(Bank bank: bankList) {
+            banks.add(BankDto.of(bank));
+        }
+        return banks;
+    }
 
     public List<CountryDto> getCountryList() {
         List<Country> countryList = countryRepository.findAll();
@@ -331,4 +335,6 @@ public class ExchangeService {
         }
         return exchangeDtoList;
     }
+
+
 }
