@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8084
 
 spring:
   datasource:
@@ -24,7 +24,7 @@ spring:
 
   # mongoDB
 #  data:
-    mongodb:
-      uri: mongodb://j9b309.p.ssafy.io:20000
-      database: finance
+#    mongodb:
+#      uri: mongodb://j9b309.p.ssafy.io:20000
+#      database: finance
 
