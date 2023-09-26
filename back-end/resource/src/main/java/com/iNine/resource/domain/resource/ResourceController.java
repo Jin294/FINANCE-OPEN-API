@@ -13,6 +13,6 @@ public class ResourceController {
     @RequestMapping("/main")
     public String main(Principal principal){
         log.info("user info:{}", principal.getName());
-        return "success";
+        return principal.getName();
     }
 }

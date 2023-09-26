@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -28,7 +26,8 @@ public class Oauth2ResourceConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/main")
                 .access("#oauth2.hasAnyScope('read')")
                 .anyRequest()
-                .authenticated();
+                .permitAll();
+//                .authenticated();
     }
 
     // 토큰 저장소를 jwt 체크하는것으로 수정
@@ -40,38 +39,17 @@ public class Oauth2ResourceConfig extends ResourceServerConfigurerAdapter {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         try{
-            /***
-             * 공개키를 직접 파일로 만들어 읽어서 jwt 디코드 키 등록
-             */
-           /* JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-            Resource resource = new ClassPathResource("key.txt");
-            converter.setVerifierKey(IOUtils.toString(resource.getInputStream()));
-            return converter;*/
-
-            /***
-             * 직접 oauth 서버를 호출하여 공개키 읽어서 jwt 디코드 키 등록
-             */
             JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
             converter.setVerifierKey(getPublicKeyValue(publicKeyUri));
             return converter;
-        }catch (Exception e){
+        } catch (Exception e){
             return new JwtAccessTokenConverter();
         }
     }
-
 
     private String getPublicKeyValue(String uriKey) {
         JsonNode response = Unirest.get(uriKey)
                 .asJson().getBody();
         return StringUtils.isEmpty(response.toString()) ? "" : new Gson().fromJson(response.toString(), JWTKey.class).getValue();
     }
-
-//    @Override
-//    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-//        RemoteTokenServices remoteTokenService = new RemoteTokenServices();
-//        remoteTokenService.setClientId("clientId");
-//        remoteTokenService.setClientSecret("secretKey");
-//        remoteTokenService.setCheckTokenEndpointUrl("http://localhost:8085/oauth/check_token");
-//        resources.tokenServices(remoteTokenService);
-//    }
 }

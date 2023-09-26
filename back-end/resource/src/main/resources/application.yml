@@ -3,4 +3,9 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://localhost:8085/oauth/token_key
+          jwk-set-uri: https://j9b309.p.ssafy.io/oauth/token_key
+
+server:
+  port: 8088 # 사용 포트
+url:
+  host: https://j9b309.p.ssafy.io
