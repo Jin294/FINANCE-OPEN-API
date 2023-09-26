@@ -1,13 +1,19 @@
 package com.ssafy.iNine.FinancialAPI.cardtransaction.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.ssafy.iNine.FinancialAPI.entity.CardTransaction;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
-public interface CardTransactionRepository extends JpaRepository<CardTransaction, Long> {
+public interface CardTransactionRepository extends MongoRepository<CardTransaction, String> {
 
-    List<CardTransaction> findByCard_CardId(Long cardId);
 
+
+    CardTransaction findFirstByDtimeAfterOrderByDtimeAsc(Timestamp dtime);
+
+
+
+    List<CardTransaction> findAllByCardIdAndDtimeBetweenOrderByDtimeAsc(Long cardId, Timestamp fromDate, Timestamp toDate);
 
 }

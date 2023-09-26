@@ -1,13 +1,14 @@
 package com.ssafy.iNine.FinancialAPI.cardtransaction.dto;
 
 import com.ssafy.iNine.FinancialAPI.entity.CardTransaction;
+import com.ssafy.iNine.FinancialAPI.entity.Merchant;
 import lombok.*;
 
 import java.math.BigDecimal;
 
 import java.sql.Timestamp;
 import java.util.List;
-
+import java.util.Objects;
 
 
 public class CardTransactionDto {
@@ -23,7 +24,7 @@ public class CardTransactionDto {
         private String orgCode;
         private Timestamp fromDate;
         private Timestamp toDate;
-        private Integer nextPage;
+        private String nextPage;
         private Integer limit;
     }
 
@@ -34,7 +35,7 @@ public class CardTransactionDto {
     @AllArgsConstructor
     public static class CardTransactionDataDto {
 
-        private Long transactionId;
+        private String transactionId;
         private Long approvedNum;
         private Timestamp approvedDtime;
         private String status;
@@ -48,20 +49,20 @@ public class CardTransactionDto {
 
         private Long cardId;
 
-        public static CardTransactionDataDto of(CardTransaction transaction) {
+        public static CardTransactionDataDto of(CardTransaction transaction, Merchant merchant) {
             return CardTransactionDataDto.builder()
-                    .transactionId(transaction.getTransactionId())
+                    .transactionId(transaction.getId())
                     .approvedNum(transaction.getApprovedNum())
                     .approvedDtime(transaction.getApprovedDtime())
                     .status(transaction.getStatus())
                     .payType(transaction.getPayType())
                     .transDtime(transaction.getTransDtime())
-                    .merchantName(transaction.getMerchantName())
-                    .merchantRegno(transaction.getMerchantRegno())
+                    .merchantName(merchant.getMerchantName())
+                    .merchantRegno(merchant.getMerchantRegno())
                     .approvedAmt(transaction.getApprovedAmt())
                     .modifiedAmt(transaction.getModifiedAmt())
                     .totalInstallCnt(transaction.getTotalInstallCnt())
-                    .cardId(transaction.getCard().getCardId())
+                    .cardId(transaction.getCardId())
                     .build();
         }
     }
@@ -73,12 +74,12 @@ public class CardTransactionDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CardTransactionResponseDto {
-        private Integer nextPage;
+        private String nextPage;
         private Integer approvedCnt;
         private List<CardTransactionDataDto> approvedList;
     }
 
-    public static CardTransactionResponseDto of(Integer nextPage, Integer approvedCnt, List<CardTransactionDataDto> approvedList) {
+    public static CardTransactionResponseDto of(String nextPage, Integer approvedCnt, List<CardTransactionDataDto> approvedList) {
         return CardTransactionResponseDto.builder()
                 .nextPage(nextPage)
                 .approvedCnt(approvedCnt)

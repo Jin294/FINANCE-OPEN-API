@@ -23,11 +23,14 @@ public class CardTransactionController {
     public DataResponse<CardTransactionDto.CardTransactionResponseDto> transactionList(
             @RequestParam("cardId") Long cardId,
             @RequestParam("orgCode") String orgCode,
-            @RequestParam("fromDate") Timestamp fromDate,
-            @RequestParam("toDate") Timestamp toDate,
-            @RequestParam("nextPage") Integer nextPage,
+            @RequestParam("fromDate") String fromDateStr,
+            @RequestParam("toDate") String toDateStr,
+            @RequestParam("nextPage") String nextPage,
             @RequestParam("limit") Integer limit
-            ) {
+    ) {
+        Timestamp fromDate = Timestamp.valueOf(fromDateStr + " 00:00:00");
+        Timestamp toDate = Timestamp.valueOf(toDateStr + " 23:59:59");
+
         CardTransactionDto.CardTransactionRequestDto CardTransactionRequestDto = CardTransactionDto.CardTransactionRequestDto.builder()
                 .cardId(cardId)
                 .orgCode(orgCode)
@@ -37,8 +40,14 @@ public class CardTransactionController {
                 .limit(limit)
                 .build();
 
-
         CardTransactionDto.CardTransactionResponseDto result = cardTransactionService.getTransactionList(CardTransactionRequestDto);
         return new DataResponse<>(200, "카드 거래 내역 조회 성공", result);
     }
+
+    @GetMapping("/cards-transaction/delete")
+    public void delete() {
+        cardTransactionService.delete();
+    }
+
+
 }
