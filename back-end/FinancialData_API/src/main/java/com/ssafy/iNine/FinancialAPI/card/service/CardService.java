@@ -86,7 +86,7 @@ public class CardService {
         return -1; // nextPage가 존재하지 않는 경우
     }
 
-    public List<Card> generateUserCards(String userId) {
+    public List<Card> generateUserCards(Long userId) {
         int cardCnt = ThreadLocalRandom.current().nextInt(1, 11);
 
         List<Card> cards = new ArrayList<>();

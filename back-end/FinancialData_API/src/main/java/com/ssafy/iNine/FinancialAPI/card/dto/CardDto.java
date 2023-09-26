@@ -17,7 +17,7 @@ public class CardDto {
         private String orgCode;
         private Integer nextPage; //cardId 보다 큰 경우 mysql 다음 개체의 id 값
         private Integer limit;
-        private String userId;
+        private Long userId;
 
         // builder를 사용하면 객체를 빌더 패턴을 통해 생성할 수 있기 때문에 기본 생성자나 매개변수를 받는 생성자를 별도로 정의할 필요 없음?
 
