@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -18,10 +19,11 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String accountNumber; // 계좌번호
+    private UUID accountNumber; // 계좌번호
     private boolean isConsent; // 전송요구 여부
     private String accountName; // 계좌명
     private String accountType; // 계좌종류
     private LocalDateTime issueDate; // 계좌개설일
     private boolean isTaxBenefits; // 세제혜택 적용여부
+    private double remainAmt = 10_000_000; // 현금 잔액 (초기금액 금 일천만원)
 }
