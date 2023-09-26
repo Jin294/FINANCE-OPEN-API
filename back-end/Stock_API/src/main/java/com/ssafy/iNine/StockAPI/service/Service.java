@@ -8,15 +8,10 @@ import com.ssafy.iNine.StockAPI.dto.AccountDto;
 import com.ssafy.iNine.StockAPI.dto.ProductDto;
 import com.ssafy.iNine.StockAPI.dto.FirmDto;
 import com.ssafy.iNine.StockAPI.dto.TransactionRecordDto;
-import com.ssafy.iNine.StockAPI.repository.AccountRepository;
-import com.ssafy.iNine.StockAPI.repository.FirmRepository;
-import com.ssafy.iNine.StockAPI.repository.ProductRepository;
-import com.ssafy.iNine.StockAPI.repository.TransactionRecordRepository;
+import com.ssafy.iNine.StockAPI.repository.*;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +25,7 @@ public class Service {
     private final ProductRepository productRepository;
     private final AccountRepository accountRepository;
     private final TransactionRecordRepository recordRepository;
+    private final UserRepository userRepository;
 
     private static Random random = new Random();
 
@@ -37,13 +33,15 @@ public class Service {
      * 고객번호와 단일 증권사가 일치하는 복수의 증권계좌를 가져온다
      * (하나의 증권사에 여러개의 계좌를 가질수도 있으니까)
      *
-     * @param userId
-     * @param firmCode
+     * @param userId 유저의 아이디(이메일)
+     * @param orgCode 기관(증권사)코드 리스트
      * @return
      */
-    public List<AccountDto> getAccountsFromSingleFirm(String userId, String firmCode) {
-
-        return accountRepository.findByUserIdAndFirmCode(userId, firmCode).stream()
+    public List<AccountDto> getAccountsFromSingleFirm(String userId, String orgCode) {
+        if (!userRepository.existsByUserId(userId)) {
+            makeAccount(userId);
+        }
+        return accountRepository.findByUserIdAndFirmCode(userId, orgCode).stream()
                 .map(account -> {
                     AccountDto dto = new AccountDto();
                     dto.setAccountNumber(String.valueOf(account.getAccountNumber()));
@@ -76,20 +74,23 @@ public class Service {
 
     /**
      * 증권사별로 내 계좌가 존재하는지 조회한다.
-     * @param userId
-     * @param firmCodes
+     * @param userId 유저의 아이디(이메일)
+     * @param orgCodes 기관(증권사)코드 리스트
      * @return
      */
-    public Map<String, List<AccountDto>> getAccountsFromAllFirms(String userId, List<FirmDto> firmCodes) {
+    public Map<String, List<AccountDto>> getAccountsFromAllFirms(String userId, List<FirmDto> orgCodes) {
+        if(!userRepository.existsByUserId(userId)) {
+            makeAccount(userId);
+        }
         Map<String, List<AccountDto>> result = new HashMap<>();
 
         // 모든 증권사의 코드
-        for (FirmDto dto : firmCodes) {
+        for (FirmDto dto : orgCodes) {
             // 단일 증권사의 계좌목록을 가져온다.
             List<AccountDto> list = getAccountsFromSingleFirm(userId, dto.getFirmCode());
             // 해당 증권사에 내 계좌가 존재한다면 취합한다.
             if (list != null || list.size() != 0) {
-                result.put(dto.getFirmCode(), list);
+                result.put(dto.getFirmName(), list);
             }
         }
 
@@ -99,11 +100,11 @@ public class Service {
 
     /**
      * fromDate와 toDate 사이의 거래내역 구하기
-     * @param orgCode
-     * @param accountNum
-     * @param fromDate
-     * @param toDate
-     * @return
+     * @param orgCode 기관(증권사)코드
+     * @param accountNum 계좌번호
+     * @param fromDate 검색시작일자
+     * @param toDate 검색끝일자
+     * @return 거래내역리스트
      */
     public List<TransactionRecordDto> getRecords(String orgCode, String accountNum, LocalDateTime fromDate, LocalDateTime toDate) {
         return recordRepository.findByAccountNumberAndTransDtimeBetween(accountNum, fromDate, toDate).stream().map(
@@ -178,31 +179,31 @@ public class Service {
         }
 
         // Map에 저장된 ProductDto 객체들을 List로 변환하여 반환
-        List<ProductDto> productDtoList = new ArrayList<>(productDtoMap.values());
-        return productDtoList;
-    }
-
-    public void makeData(){
+        return new ArrayList<>(productDtoMap.values());
     }
 
     // 신규 계좌 생성
     public void makeAccount(String userId){
         List<String> firmCode = firmRepository.findAllFirmCode();
         int len = firmCode.size();
+        int limit = (int) (random() * len);
+        // 랜덤한 개수의 계좌 생성
+        for (int i = 0; i < limit; i++) {
+            Account accountTemplate = Account.builder()
+                    .userId(userId)
+                    .firmCode(firmCode.get((int) (random() * len)))
 
-        Account accountTemplate = Account.builder()
-                .userId(userId)
-                .firmCode(firmCode.get((int) (random() * len)))
+                    .accountNumber(UUID.randomUUID())
+                    .isConsent(false)
+                    .accountType("101")
+                    .issueDate(LocalDateTime.now())
+                    .isTaxBenefits(false)
+                    .build();
 
-                .accountNumber(UUID.randomUUID())
-                .isConsent(false)
-                .accountType("101")
-                .issueDate(LocalDateTime.now())
-                .isTaxBenefits(false)
-                .build();
-
-        accountTemplate.setAccountName(firmRepository.getFirmName(accountTemplate.getFirmCode()) + (random() * 100 + 1));
-        accountRepository.save(accountTemplate);
+            accountTemplate.setAccountName(firmRepository.getFirmName(accountTemplate.getFirmCode()) + (random() * 100 + 1));
+            accountRepository.save(accountTemplate);
+            makeRecords(userId, accountTemplate.getFirmCode(), String.valueOf(accountTemplate.getAccountNumber()));
+        }
     }
 
     // 신규 거래내역을 100개 생성
