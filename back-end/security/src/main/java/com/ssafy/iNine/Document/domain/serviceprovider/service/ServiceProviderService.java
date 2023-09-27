@@ -72,11 +72,13 @@ public class ServiceProviderService {
         userRepository.save(serviceProvider);
     }
 
-    public void setApiToken(Long userId) {
+    public String setApiToken(Long userId) {
         ServiceProvider serviceProvider = userRepository.findById(userId).orElseThrow(()->{
             return new CommonException(ExceptionType.USER_NOT_FOUND);
         });
-        userRepository.modifyApiToken(userId, JwtUtil.generateApiToken(serviceProvider.getEmail()));
+        String newToken = JwtUtil.generateApiToken(serviceProvider.getEmail());
+        userRepository.modifyApiToken(userId, newToken);
+        return newToken;
     }
     public String getApiToken(Long userId) {
         ServiceProvider serviceProvider = userRepository.findById(userId).orElseThrow(()->{

@@ -64,10 +64,10 @@ public class ServiceProviderController {
     }
 
     @PostMapping("/token")
-    public CommonResponse setApiToken(Principal principal) {
+    public DataResponse<?> setApiToken(Principal principal) {
         Long serviceProviderId = Long.parseLong(principal.getName());
-        serviceProviderService.setApiToken(serviceProviderId);
-        return new CommonResponse(200, "success");
+        String token = serviceProviderService.setApiToken(serviceProviderId);
+        return new DataResponse<>(200, "success", token);
     }
     @GetMapping("/token")
     public DataResponse<String> getApiToken(Principal principal) {
