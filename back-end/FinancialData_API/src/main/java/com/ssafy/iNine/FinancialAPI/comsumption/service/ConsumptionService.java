@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -41,9 +42,9 @@ public class ConsumptionService {
 
         Map<String, BigDecimal> prices = new HashMap<>(); // 업종별 총 소비 가격
         Map<Long, String> types = new HashMap<>(); // merchantId의 타입 이름
-        BigDecimal total = new BigDecimal("0.0");
+        BigDecimal total = new BigDecimal(0.0);
         for(CardTransaction transaction: cardTransactionList) {
-            //
+            // 상점 타입 map 확인
             Long merchantId = transaction.getMerchantId();
             if(!types.containsKey(merchantId)) {
                 Merchant merchant = merchantRepository.findById(merchantId)
@@ -60,15 +61,17 @@ public class ConsumptionService {
             } else {
                 price = transaction.getApprovedAmt();
             }
-            total.add(price);
-            prices.put(merchantType, prices.getOrDefault(merchantType, new BigDecimal("0.0")).add(price));
+            total = total.add(price);
+            prices.put(merchantType, prices.getOrDefault(merchantType, new BigDecimal(0.0)).add(price));
         }
 
+        final BigDecimal totalPrice = new BigDecimal(total.doubleValue());
         prices.forEach((key, value)->{
             ConsumptionDto consumptionDto = new ConsumptionDto();
             consumptionDto.setMerchantType(key);
             consumptionDto.setPrice(value);
-            consumptionDto.setPercent(value.divide(total).multiply(new BigDecimal("100.0")));
+            if(totalPrice.compareTo(BigDecimal.ZERO) != 0) consumptionDto.setPercent(value.divide(totalPrice, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100.0)));
+            consumptionList.add(consumptionDto);
         });
 
         return consumptionList;
