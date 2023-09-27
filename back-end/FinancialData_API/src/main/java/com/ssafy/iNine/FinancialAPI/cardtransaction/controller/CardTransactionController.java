@@ -19,7 +19,7 @@ public class CardTransactionController {
 
     private final CardTransactionService cardTransactionService;
 
-    @GetMapping("/cards-transaction")
+    @GetMapping("/cards/transaction")
     public DataResponse<CardTransactionDto.CardTransactionResponseDto> transactionList(
             @RequestParam("cardId") Long cardId,
             @RequestParam("orgCode") String orgCode,
