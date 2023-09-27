@@ -17,12 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -79,8 +76,6 @@ public class CardTransactionService {
         }
 
         // 응답 객체 생성
-
-//        transactionResponse.setNextPage(nextPage);
         transactionResponse.setApprovedCnt(paginatedTransactionList.size());
         transactionResponse.setApprovedList(paginatedTransactionList);
         return transactionResponse;
@@ -94,7 +89,6 @@ public class CardTransactionService {
             CardTransaction transaction = cardTransactionRepository.findById(nextPage)
                     .orElseThrow(() -> new CommonException(ExceptionType.CARD_TRANSACTION_NOT_FOUND));
 
-//            CardTransaction nextTransaction = cardTransactionRepository.findFirstByDtimeAfterOrderByDtimeAsc(prevTransaction.getDtime());
             System.out.println(transaction);
             // 이전 페이지에서 마지막으로 조회한 개체의 인덱스를 찾음
             for (int i = 0; i < transactionList.size(); i++) {
@@ -128,7 +122,7 @@ public class CardTransactionService {
 
 
     public List<CardTransaction> generateTransactionList(Card card) {
-        int transactionCnt = ThreadLocalRandom.current().nextInt(50, 151);
+        int transactionCnt = ThreadLocalRandom.current().nextInt(1, 11);
 
         List<CardTransaction> transactions = new ArrayList<>();
 
@@ -141,52 +135,7 @@ public class CardTransactionService {
 
             Timestamp approvedDtime = null;
 
-            // 02, 03인 경우에 승인내역 status가 01이고 나머지는 동일한 거래 내역을 만든다
 
-
-            if (status.equals("01")) {
-
-                approvedDtime = generateApprovedDtime();
-                transaction.setApprovedNum(generateApprovedNum());
-            } else {
-
-
-                approvedDtime = generateApprovedDtime();
-                Timestamp transDtime = generateTransDtime(approvedDtime);
-                transaction.setTransDtime(transDtime);
-
-
-                if (transaction.getStatus().equals("02")) {
-                    // status가 01인 거래 내역을 하나 더 생성한다. status 외 나머지 필드는 status가 02인 것과 같다.
-                    CardTransaction newTransaction = new CardTransaction();
-                    newTransaction.setStatus("01");
-                    newTransaction.setId(transaction.getId());
-                    newTransaction.setApprovedNum(transaction.getApprovedNum());
-                    newTransaction.setApprovedDtime(transaction.getApprovedDtime());
-
-
-                }
-
-
-                if (transaction.getStatus().equals("03")) {
-                    //status가 01인 거래 내역을 하나 더 생성한다. status외 나머지 필드는 status가 02인 것과 같다.
-
-
-                    if (approvedDtime.before(transDtime)) {
-                        transaction.setApprovedNum(generateApprovedNum());
-                    } else {
-
-                        transaction.setApprovedNum(generateApprovedNum());
-                        approvedDtime = new Timestamp(transDtime.getTime() - 1000000);
-                    }
-
-                    transaction.setModifiedAmt(generateModifiedAmt());
-                }
-            }
-
-            transaction.setApprovedDtime(approvedDtime);
-
-            transaction.setDtime(approvedDtime);
 
 
             if (card.getCardType().equals("01")) {
@@ -203,17 +152,86 @@ public class CardTransactionService {
             transaction.setApprovedAmt(generateApprovedAmt());
 
 
+
+            if (status.equals("01")) {
+
+                approvedDtime = generateApprovedDtime();
+                transaction.setApprovedNum(generateApprovedNum());
+            } else {
+
+
+                approvedDtime = generateApprovedDtime();
+                Timestamp transDtime = generateTransDtime(approvedDtime);
+                transaction.setTransDtime(transDtime);
+
+                if (transaction.getStatus().equals("02")) {
+                    // status가 01인 거래 내역을 하나 더 생성한다. status 외 나머지 필드는 status가 02인 것과 같다.
+                    CardTransaction newTransaction = new CardTransaction();
+                    newTransaction.setStatus("01");
+                    newTransaction.setApprovedNum(generateApprovedNum());
+                    newTransaction.setApprovedDtime(generateApprovedDtime());
+                    newTransaction.setPayType(transaction.getPayType());
+                    newTransaction.setTransDtime(null);
+                    newTransaction.setMerchantId(transaction.getMerchantId());
+                    newTransaction.setApprovedAmt(transaction.getApprovedAmt());
+                    newTransaction.setModifiedAmt(transaction.getModifiedAmt());
+                    newTransaction.setTotalInstallCnt(transaction.getTotalInstallCnt());
+                    newTransaction.setCardId(transaction.getCardId());
+
+
+
+                    newTransaction.setDtime(approvedDtime);
+
+                    transactions.add(newTransaction);
+                    System.out.println(newTransaction);
+                }
+
+
+                if (transaction.getStatus().equals("03")) {
+                    //status가 01인 거래 내역을 하나 더 생성한다. status외 나머지 필드는 status가 02인 것과 같다.
+
+
+                    if (approvedDtime.before(transDtime)) {
+                        transaction.setApprovedNum(generateApprovedNum());
+                    } else {
+
+                        transaction.setApprovedNum(generateApprovedNum());
+                        approvedDtime = new Timestamp(transDtime.getTime() - 10000);
+                    }
+
+                    transaction.setModifiedAmt(generateModifiedAmt());
+
+                    CardTransaction newTransaction = new CardTransaction();
+                    newTransaction.setStatus("01");
+                    newTransaction.setApprovedNum(generateApprovedNum());
+                    newTransaction.setApprovedDtime(transaction.getApprovedDtime());
+                    newTransaction.setPayType(transaction.getPayType());
+                    newTransaction.setTransDtime(null);
+                    newTransaction.setMerchantId(transaction.getMerchantId());
+                    newTransaction.setApprovedAmt(transaction.getApprovedAmt());
+                    newTransaction.setModifiedAmt(null);
+                    newTransaction.setTotalInstallCnt(transaction.getTotalInstallCnt());
+                    newTransaction.setCardId(transaction.getCardId());
+
+
+
+                    newTransaction.setDtime(approvedDtime);
+
+                    transactions.add(newTransaction);
+                }
+
+            }
+
+            transaction.setApprovedDtime(approvedDtime);
+
+            transaction.setDtime(approvedDtime);
+
+
+
             transactions.add(transaction);
         }
 
-        Collections.sort(transactions, new Comparator<CardTransaction>() {
-            @Override
-            public int compare(CardTransaction transaction1, CardTransaction transaction2) {
-                Timestamp dtime1 = transaction1.getDtime();
-                Timestamp dtime2 = transaction2.getDtime();
-                return dtime1.compareTo(dtime2);
-            }
-        });
+
 
         return transactions;
     }
