@@ -1,9 +1,9 @@
 package com.ssafy.iNine.StockAPI.service;
 
 import com.ssafy.iNine.StockAPI.domain.Account;
-import com.ssafy.iNine.StockAPI.domain.Firm;
 import com.ssafy.iNine.StockAPI.domain.Product;
 import com.ssafy.iNine.StockAPI.domain.TransactionRecord;
+import com.ssafy.iNine.StockAPI.domain.User;
 import com.ssafy.iNine.StockAPI.dto.AccountDto;
 import com.ssafy.iNine.StockAPI.dto.ProductDto;
 import com.ssafy.iNine.StockAPI.dto.FirmDto;
@@ -27,7 +27,10 @@ public class Service {
     private final TransactionRecordRepository recordRepository;
     private final UserRepository userRepository;
 
-    private static Random random = new Random();
+    private static final int ACCOUNT_NUMBER_LENGTH = 25; // 10 기관코드 + 12 숫자 + 3 구분자('-') = 총 25 글자
+    private static final String SEPARATOR = "-";
+
+    private static final Random random = new Random();
 
     /**
      * 고객번호와 단일 증권사가 일치하는 복수의 증권계좌를 가져온다
@@ -35,7 +38,7 @@ public class Service {
      *
      * @param userId 유저의 아이디(이메일)
      * @param orgCode 기관(증권사)코드 리스트
-     * @return
+     * @return 계좌목록
      */
     public List<AccountDto> getAccountsFromSingleFirm(String userId, String orgCode) {
         if (!userRepository.existsByUserId(userId)) {
@@ -44,13 +47,12 @@ public class Service {
         return accountRepository.findByUserIdAndFirmCode(userId, orgCode).stream()
                 .map(account -> {
                     AccountDto dto = new AccountDto();
-                    dto.setAccountNumber(String.valueOf(account.getAccountNumber()));
+                    dto.setAccountNumber(account.getAccountNumber());
                     dto.setConsent(account.isConsent());
                     dto.setAccountName(account.getAccountName());
                     dto.setAccountType(account.getAccountType());
                     dto.setIssueDate(account.getIssueDate());
                     dto.setTaxBenefits(account.isTaxBenefits());
-
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -61,25 +63,22 @@ public class Service {
      *
      * @return 리스트에 담긴 증권사의 고유 코드목록
      */
-    public List<FirmDto> getFirmCodes() {
-        List<String> list = firmRepository.findAllFirmCode();
-        List<FirmDto> firmcodes = new ArrayList<>();
-        for (String code : list) {
-            FirmDto tmp = new FirmDto();
-            tmp.setFirmCode(code);
-            firmcodes.add(tmp);
-        }
-        return firmcodes;
+    public List<FirmDto> getFirmObjects() {
+        return firmRepository.findAll().stream().map(obj -> FirmDto.builder()
+                    .firmName(obj.getFirmName())
+                    .firmCode(obj.getFirmCode())
+                    .build()).collect(Collectors.toList());
     }
 
     /**
      * 증권사별로 내 계좌가 존재하는지 조회한다.
      * @param userId 유저의 아이디(이메일)
      * @param orgCodes 기관(증권사)코드 리스트
-     * @return
+     * @return 증권사별 계좌목록
      */
     public Map<String, List<AccountDto>> getAccountsFromAllFirms(String userId, List<FirmDto> orgCodes) {
         if(!userRepository.existsByUserId(userId)) {
+            userRepository.save(new User(userId));
             makeAccount(userId);
         }
         Map<String, List<AccountDto>> result = new HashMap<>();
@@ -89,7 +88,7 @@ public class Service {
             // 단일 증권사의 계좌목록을 가져온다.
             List<AccountDto> list = getAccountsFromSingleFirm(userId, dto.getFirmCode());
             // 해당 증권사에 내 계좌가 존재한다면 취합한다.
-            if (list != null || list.size() != 0) {
+            if (list != null && list.size() != 0) {
                 result.put(dto.getFirmName(), list);
             }
         }
@@ -189,20 +188,20 @@ public class Service {
         int limit = (int) (random() * len);
         // 랜덤한 개수의 계좌 생성
         for (int i = 0; i < limit; i++) {
+            String orgCode = firmCode.get((int) (random() * len));
             Account accountTemplate = Account.builder()
                     .userId(userId)
-                    .firmCode(firmCode.get((int) (random() * len)))
-
-                    .accountNumber(UUID.randomUUID())
+                    .firmCode(orgCode)
+                    .accountNumber(generateAccountNumber(orgCode))
                     .isConsent(false)
                     .accountType("101")
                     .issueDate(LocalDateTime.now())
                     .isTaxBenefits(false)
                     .build();
 
-            accountTemplate.setAccountName(firmRepository.getFirmName(accountTemplate.getFirmCode()) + (random() * 100 + 1));
+            accountTemplate.setAccountName(firmRepository.getFirmName(accountTemplate.getFirmCode()) + (int)(random() * 100 + 1));
             accountRepository.save(accountTemplate);
-            makeRecords(userId, accountTemplate.getFirmCode(), String.valueOf(accountTemplate.getAccountNumber()));
+            makeRecords(userId, accountTemplate.getFirmCode(), accountTemplate.getAccountNumber());
         }
     }
 
@@ -253,5 +252,19 @@ public class Service {
 
             recordRepository.save(tmp);
         }
+    }
+
+    public String generateAccountNumber(String orgCode) {
+        StringBuilder accountNumber = new StringBuilder(orgCode);
+
+        for (int i = 0; i < 12; i++) {
+            if (i % 5 == 0) {
+                accountNumber.append(SEPARATOR); // 매 4글자마다 구분자('-') 추가
+            }
+            int digit = random.nextInt(10);
+            accountNumber.append(digit);
+        }
+
+        return accountNumber.toString();
     }
 }

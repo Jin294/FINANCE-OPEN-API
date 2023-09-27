@@ -59,9 +59,11 @@ public class Controller {
     @GetMapping("/allAccounts/{userId}")
     public ResponseEntity<Map<String, Object>> getAllAccounts(@PathVariable("userId") String userId) {
         Map<String, Object> map = new HashMap<>();
+        List<FirmDto> firmList = service.getFirmObjects();
+        Map<String, List<AccountDto>> mmp = service.getAccountsFromAllFirms(userId, firmList);
 
         // myAccounts 내에 증권사 코드별로 계좌번호가 취합됨
-        map.put("myAccounts", service.getAccountsFromAllFirms(userId, service.getFirmCodes()));
+        map.put("myAccounts", mmp);
         return ResponseEntity.ok(map);
     }
 
@@ -104,7 +106,7 @@ public class Controller {
         Map<String, List<AccountDto>> accountsByFirm = new HashMap<>();
 
         // 모든 증권사의 코드를 가져온다
-        List<FirmDto> codes = service.getFirmCodes();
+        List<FirmDto> codes = service.getFirmObjects();
         for (FirmDto dto : codes) {
             // 각 증권사 별 계좌목록 리스트
             List<AccountDto> list = service.getAccountsFromSingleFirm(userId, dto.getFirmCode());
