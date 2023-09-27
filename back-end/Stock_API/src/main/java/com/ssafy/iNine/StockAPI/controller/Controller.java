@@ -98,8 +98,8 @@ public class Controller {
      * @param userId
      * @return
      */
-    @PostMapping("/myAllInvest/{userId}")
-    public ResponseEntity<Map<String, Object>> getAllOfMine(@PathVariable String userId) {
+    @PostMapping("/all")
+    public ResponseEntity<Map<String, Object>> getAllOfMine(String userId) {
         Map<String, Object> map = new HashMap<>();
         Map<String, List<AccountDto>> accountsByFirm = new HashMap<>();
 
