@@ -24,7 +24,7 @@ public class CardController {
             @RequestParam("orgCode") String orgCode,
             @RequestParam("nextPage") Integer nextPage,
             @RequestParam("limit") Integer limit,
-            @RequestParam("userId") Long userId
+            @RequestParam("userId") String userId
     ) {
         CardDto.CardRequestDto cardRequestDto = CardDto.CardRequestDto.builder()
                 .orgCode(orgCode)
