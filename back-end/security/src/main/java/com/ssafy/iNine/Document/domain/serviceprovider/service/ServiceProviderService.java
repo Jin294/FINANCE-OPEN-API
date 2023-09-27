@@ -104,7 +104,7 @@ public class ServiceProviderService {
         return clientInfoList;
     }
 
-    public void setOAuthClient(Long userId, OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
+    public OAuthClientDetails setOAuthClient(Long userId, OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
         ServiceProvider serviceProvider = userRepository.findById(userId)
                 .orElseThrow(() -> {
                     return new CommonException(ExceptionType.USER_NOT_FOUND);
@@ -124,5 +124,6 @@ public class ServiceProviderService {
 
         if(oAuthClientRegistForm.getAdditional_information() != null) oAuthClientDetails.setAdditionalInformation(oAuthClientRegistForm.getAdditional_information());
         oAuthClientDetailsRepository.save(oAuthClientDetails);
+        return oAuthClientDetails;
     }
 }

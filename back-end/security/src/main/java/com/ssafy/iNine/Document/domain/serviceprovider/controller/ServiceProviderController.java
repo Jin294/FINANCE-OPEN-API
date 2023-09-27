@@ -1,5 +1,6 @@
 package com.ssafy.iNine.Document.domain.serviceprovider.controller;
 
+import com.ssafy.iNine.Document.common.entity.oauth.OAuthClientDetails;
 import com.ssafy.iNine.Document.domain.serviceprovider.dto.OAuthClientDetailsDto;
 import com.ssafy.iNine.Document.domain.serviceprovider.dto.ServiceProviderDto;
 import com.ssafy.iNine.Document.domain.serviceprovider.service.ServiceProviderService;
@@ -49,10 +50,10 @@ public class ServiceProviderController {
     }
 
     @PostMapping("/client")
-    public CommonResponse setClient(Principal principal, @RequestBody OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
+    public DataResponse<?> setClient(Principal principal, @RequestBody OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
         Long serviceProviderId = Long.parseLong(principal.getName());
-        serviceProviderService.setOAuthClient(serviceProviderId, oAuthClientRegistForm);
-        return new CommonResponse(200, "success");
+        OAuthClientDetails data = serviceProviderService.setOAuthClient(serviceProviderId, oAuthClientRegistForm);
+        return new DataResponse(200, "success", data);
     }
 
     @GetMapping("/client")
