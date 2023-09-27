@@ -53,6 +53,7 @@ public class ConsumptionService {
             }
             String merchantType = types.get(merchantId);
 
+            // 경우에 따른 가격 계산
             BigDecimal price;
             if(transaction.getStatus().equals("02")) { // 취소
                 price = new BigDecimal(0.0).subtract(transaction.getApprovedAmt());
@@ -61,19 +62,32 @@ public class ConsumptionService {
             } else {
                 price = transaction.getApprovedAmt();
             }
+
             total = total.add(price);
             prices.put(merchantType, prices.getOrDefault(merchantType, new BigDecimal(0.0)).add(price));
         }
 
+        // 가격이 음수인 경우 제거하기
+        for(String key: prices.keySet()) {
+            BigDecimal value = prices.get(key);
+            if(value.compareTo(BigDecimal.ZERO)<0) {
+                total.subtract(value);
+            }
+        }
+
+        // 반환 list에 값 넣기
         final BigDecimal totalPrice = new BigDecimal(total.doubleValue());
         prices.forEach((key, value)->{
-            ConsumptionDto consumptionDto = new ConsumptionDto();
-            consumptionDto.setMerchantType(key);
-            consumptionDto.setPrice(value);
-            if(totalPrice.compareTo(BigDecimal.ZERO) != 0) consumptionDto.setPercent(value.divide(totalPrice, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100.0)));
-            consumptionList.add(consumptionDto);
+            if(value.compareTo(BigDecimal.ZERO)>0) {
+                ConsumptionDto consumptionDto = new ConsumptionDto();
+                consumptionDto.setMerchantType(key);
+                consumptionDto.setPrice(value);
+                if(totalPrice.compareTo(BigDecimal.ZERO) != 0) consumptionDto.setPercent(value.divide(totalPrice, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100.0)));
+                consumptionList.add(consumptionDto);
+            }
         });
 
+        Collections.sort(consumptionList);
         return consumptionList;
     }
 }
