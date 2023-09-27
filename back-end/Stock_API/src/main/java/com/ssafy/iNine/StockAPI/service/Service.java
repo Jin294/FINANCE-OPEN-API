@@ -270,4 +270,8 @@ public class Service {
             makeAccount(userId);
         }
     }
+
+    public Optional<String> getFirmCodeFromKeyWord(String keyword) {
+        return firmRepository.findFirmCodeByContainingKeyword(keyword);
+    }
 }

@@ -156,4 +156,12 @@ public class Controller {
 
         return ResponseEntity.ok(map);
     }
+
+    @GetMapping("/find/{keyWord}")
+    public ResponseEntity<String> getFirmCodeFromKeyWord(@PathVariable String keyword) {
+        Optional<String> resultOptional = service.getFirmCodeFromKeyWord(keyword);
+
+        return resultOptional.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
