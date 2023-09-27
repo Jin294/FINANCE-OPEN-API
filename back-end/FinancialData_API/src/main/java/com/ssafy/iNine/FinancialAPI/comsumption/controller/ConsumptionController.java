@@ -17,7 +17,7 @@ import java.util.List;
 public class ConsumptionController {
     private final ConsumptionService consumptionService;
 
-    @GetMapping("/cards")
+    @GetMapping("/consumption")
     public DataResponse<List<ConsumptionDto>> analysisConsumption(@RequestParam("userId") String userId) {
         List<ConsumptionDto> consumptionList = consumptionService.analysisConsumption(userId);
         return new DataResponse<>(200, "소비 내역 조회 성공", consumptionList);
