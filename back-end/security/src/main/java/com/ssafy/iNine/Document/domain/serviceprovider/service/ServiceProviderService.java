@@ -107,16 +107,16 @@ public class ServiceProviderService {
     public OAuthClientDetails setOAuthClient(Long userId, OAuthClientDetailsDto.OAuthClientRegistForm oAuthClientRegistForm) {
         ServiceProvider serviceProvider = userRepository.findById(userId)
                 .orElseThrow(() -> {
-                    return new CommonException(ExceptionType.USER_NOT_FOUND);
+                    throw new CommonException(ExceptionType.USER_NOT_FOUND);
                 });
         OAuthClientDetails oAuthClientDetails = OAuthClientDetails.builder()
                 .clientId(String.valueOf(UUID.randomUUID()))
-                .accessTokenValidity(36000)
+                .accessTokenValidity(360000)
 //                .authorizedGrantTypes("authorization_code,implicit,password,client_credentials,refresh_token")
                 .authorizedGrantTypes("authorization_code")
                 .scope("read, write")
                 .autoapprove("false")
-                .clientSecret(JwtUtil.generateSecretKey(serviceProvider.getEmail(), oAuthClientRegistForm.getWeb_server_redirect_uri()))
+                .clientSecret(JwtUtil.generateSecretKey(serviceProvider.getEmail()))
                 .refreshTokenValidity(360000)
                 .webServerRedirectUri(oAuthClientRegistForm.getWeb_server_redirect_uri())
                 .serviceProvider(serviceProvider)

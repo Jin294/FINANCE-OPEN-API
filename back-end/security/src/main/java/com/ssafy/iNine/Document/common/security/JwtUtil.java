@@ -74,14 +74,13 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static String generateSecretKey(String email, String redirectUri) {
+    public static String generateSecretKey(String email) {
         Instant now = Instant.now();
         //유효기간 1년
         Instant expirationInstant = now.plusMillis(365L * 24 * 60 * 60 * 1000);
 
         Claims claims = Jwts.claims();
         claims.put("email", email);
-        claims.put("redirectUri", redirectUri);
         claims.setExpiration(Date.from(expirationInstant));
         claims.setSubject("api-token");
 

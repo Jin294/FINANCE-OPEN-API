@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name = "oauth_client_details")
 public class OAuthClientDetails {
     @Id
-    @Column(name = "client_id")
+    @Column(name = "client_id", length=300)
     private String clientId;
 
     @Column(name = "resource_ids")
@@ -29,7 +29,7 @@ public class OAuthClientDetails {
     @Column(name = "authorized_grant_types")
     private String authorizedGrantTypes;
 
-    @Column(name = "web_server_redirect_uri")
+    @Column(name = "web_server_redirect_uri", length=4096)
     private String webServerRedirectUri;
 
     @Column(name = "authorities")
