@@ -24,7 +24,6 @@ public class TransactionRecord {
     private String prodCode; // 종목코드 (상품코드)
     private LocalDateTime transDtime; // 거래일시 또는 거래일자
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String transNo; // 거래번호 (해당 일자의 거래 특정 번호, 없을 경우 미회신)
     private String transType; // 거래종류 (거래종류 특정코드), 305 : 매수, 306 : 매도
     private String transTypeDetail; // 상세 거래 종류 (코드가 아닌 상세 거래 종류 명)
