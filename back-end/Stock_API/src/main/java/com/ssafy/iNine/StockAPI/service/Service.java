@@ -192,6 +192,7 @@ public class Service {
                     .accountType("101")
                     .issueDate(LocalDateTime.now())
                     .isTaxBenefits(false)
+                    .remainAmt(10_000_000.0)
                     .build();
 
             accountTemplate.setAccountName(firmRepository.getFirmName(accountTemplate.getFirmCode()) + (int)(random() * 100 + 1));

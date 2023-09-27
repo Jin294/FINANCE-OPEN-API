@@ -22,5 +22,5 @@ public class Account {
     private String accountType; // 계좌종류
     private LocalDateTime issueDate; // 계좌개설일
     private boolean isTaxBenefits; // 세제혜택 적용여부
-    private double remainAmt = 10_000_000; // 현금 잔액 (초기금액 금 일천만원)
+    private double remainAmt; // 현금 잔액 (초기금액 금 일천만원)
 }
