@@ -15,7 +15,7 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cardId; // 카드 식별자
-    private Long userId; // 사용자 ID
+    private String userId; // 사용자 ID
     private String cardNum;     // 카드 번호
     private Boolean isConsent; // 전송요구 여부
     private String cardName; // 카드상품명

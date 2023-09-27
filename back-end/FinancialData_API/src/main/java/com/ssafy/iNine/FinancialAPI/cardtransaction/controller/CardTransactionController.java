@@ -44,7 +44,7 @@ public class CardTransactionController {
         return new DataResponse<>(200, "카드 거래 내역 조회 성공", result);
     }
 
-    @GetMapping("/cards-transaction/delete")
+    @GetMapping("/cards/transaction/delete")
     public void delete() {
         cardTransactionService.delete();
     }
