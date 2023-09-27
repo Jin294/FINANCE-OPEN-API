@@ -78,6 +78,7 @@ public class ServiceProviderService {
         });
         String newToken = JwtUtil.generateApiToken(serviceProvider.getEmail());
         userRepository.modifyApiToken(userId, newToken);
+        log.info("새로운 토큰:{}", newToken);
         return newToken;
     }
     public String getApiToken(Long userId) {
