@@ -103,7 +103,7 @@ public class CardTransactionService {
                 }
             }
 
-            System.out.println(startIndex);
+
             if (startIndex == -1) return new ArrayList<>();
 
         } else {
@@ -141,19 +141,36 @@ public class CardTransactionService {
 
             Timestamp approvedDtime = null;
 
+            // 02, 03인 경우에 승인내역 status가 01이고 나머지는 동일한 거래 내역을 만든다
+
+
             if (status.equals("01")) {
 
                 approvedDtime = generateApprovedDtime();
                 transaction.setApprovedNum(generateApprovedNum());
             } else {
 
+
                 approvedDtime = generateApprovedDtime();
-
-
                 Timestamp transDtime = generateTransDtime(approvedDtime);
                 transaction.setTransDtime(transDtime);
 
+
+                if (transaction.getStatus().equals("02")) {
+                    // status가 01인 거래 내역을 하나 더 생성한다. status 외 나머지 필드는 status가 02인 것과 같다.
+                    CardTransaction newTransaction = new CardTransaction();
+                    newTransaction.setStatus("01");
+                    newTransaction.setId(transaction.getId());
+                    newTransaction.setApprovedNum(transaction.getApprovedNum());
+                    newTransaction.setApprovedDtime(transaction.getApprovedDtime());
+
+
+                }
+
+
                 if (transaction.getStatus().equals("03")) {
+                    //status가 01인 거래 내역을 하나 더 생성한다. status외 나머지 필드는 status가 02인 것과 같다.
+
 
                     if (approvedDtime.before(transDtime)) {
                         transaction.setApprovedNum(generateApprovedNum());
