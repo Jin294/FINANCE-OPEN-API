@@ -19,7 +19,6 @@ public class Product {
     private String prodTypeDetail; // 상품종류 상세 (정보제공자가 특정한 상품의 상세 명칭(CMA, RP, CD, ETF)
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String prodCode; // 종목코드 (상품코드)
 
     @Nullable

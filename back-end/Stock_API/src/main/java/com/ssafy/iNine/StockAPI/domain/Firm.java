@@ -15,7 +15,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Firm {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String firmName;
 
     private String firmCode;
