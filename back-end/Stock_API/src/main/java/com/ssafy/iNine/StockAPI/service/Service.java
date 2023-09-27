@@ -41,9 +41,7 @@ public class Service {
      * @return 계좌목록
      */
     public List<AccountDto> getAccountsFromSingleFirm(String userId, String orgCode) {
-        if (!userRepository.existsByUserId(userId)) {
-            makeAccount(userId);
-        }
+        checkIsPresent(userId);
         return accountRepository.findByUserIdAndFirmCode(userId, orgCode).stream()
                 .map(account -> {
                     AccountDto dto = new AccountDto();
@@ -77,10 +75,7 @@ public class Service {
      * @return 증권사별 계좌목록
      */
     public Map<String, List<AccountDto>> getAccountsFromAllFirms(String userId, List<FirmDto> orgCodes) {
-        if(!userRepository.existsByUserId(userId)) {
-            userRepository.save(new User(userId));
-            makeAccount(userId);
-        }
+        checkIsPresent(userId);
         Map<String, List<AccountDto>> result = new HashMap<>();
 
         // 모든 증권사의 코드
@@ -266,5 +261,12 @@ public class Service {
         }
 
         return accountNumber.toString();
+    }
+
+    public void checkIsPresent(String userId) {
+        if(!userRepository.existsByUserId(userId)) {
+            userRepository.save(new User(userId));
+            makeAccount(userId);
+        }
     }
 }
