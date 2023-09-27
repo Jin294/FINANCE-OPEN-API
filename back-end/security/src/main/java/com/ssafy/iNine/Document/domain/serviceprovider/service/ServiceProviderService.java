@@ -72,6 +72,13 @@ public class ServiceProviderService {
         userRepository.save(serviceProvider);
     }
 
+    public String getApiToken(Long userId) {
+        ServiceProvider serviceProvider = userRepository.findById(userId).orElseThrow(()->{
+            return new CommonException(ExceptionType.USER_NOT_FOUND);
+        });
+        return serviceProvider.getApiToken();
+    }
+
     public String setApiToken(Long userId) {
         ServiceProvider serviceProvider = userRepository.findById(userId).orElseThrow(()->{
             return new CommonException(ExceptionType.USER_NOT_FOUND);
@@ -80,12 +87,6 @@ public class ServiceProviderService {
         userRepository.modifyApiToken(userId, newToken);
         log.info("새로운 토큰:{}", newToken);
         return newToken;
-    }
-    public String getApiToken(Long userId) {
-        ServiceProvider serviceProvider = userRepository.findById(userId).orElseThrow(()->{
-            return new CommonException(ExceptionType.USER_NOT_FOUND);
-        });
-        return serviceProvider.getApiToken();
     }
 
 
