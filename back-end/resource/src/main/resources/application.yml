@@ -4,8 +4,20 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: https://j9b309.p.ssafy.io/oauth/token_key
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://j9b309.p.ssafy.io:3306/i9?serverTimezone=Asia/Seoul
+    username: i9B309
+    password: ***REMOVED***
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
 
 server:
   port: 8088 # 사용 포트
 url:
-  host: https://j9b309.p.ssafy.io
+  host: http://j9b309.p.ssafy.io
+
+#  host: http://j9b309.p.ssafy.io:8084

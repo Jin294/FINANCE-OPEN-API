@@ -1,4 +1,4 @@
-package com.iNine.resource.common.dto;
+package com.iNine.resource.common.entity;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

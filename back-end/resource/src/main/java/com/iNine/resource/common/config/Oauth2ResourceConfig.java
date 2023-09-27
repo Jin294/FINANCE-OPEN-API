@@ -1,7 +1,7 @@
 package com.iNine.resource.common.config;
 
 import com.google.gson.Gson;
-import com.iNine.resource.common.dto.JWTKey;
+import com.iNine.resource.common.entity.JWTKey;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.springframework.beans.factory.annotation.Value;
