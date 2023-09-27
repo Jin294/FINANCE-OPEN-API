@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/invest")
@@ -34,6 +35,12 @@ public class Controller {
     public ResponseEntity<Map<String, Object>> getAccountsByFirm(@PathVariable String userId, String orgCode, LocalDateTime searchTimeStamp, String nextPage, int limit) {
         if (searchTimeStamp == null) {
             searchTimeStamp = LocalDateTime.now();
+        }
+        if (nextPage == null) {
+            nextPage = "1";
+        }
+        if (limit == 0) {
+            limit = 1;
         }
         System.out.println("userId = " + userId + ", orgCode = " + orgCode + ", searchTimeStamp = " + searchTimeStamp + ", nextPage = " + nextPage + ", limit = " + limit);
         Map<String, Object> map = new HashMap<>();
@@ -100,20 +107,23 @@ public class Controller {
      * @param userId
      * @return
      */
-    @PostMapping("/all")
-    public ResponseEntity<Map<String, Object>> getAllOfMine(String userId) {
+    @PostMapping("/all/{userId}")
+    public ResponseEntity<Map<String, Object>> getAllOfMine(@PathVariable String userId) {
         Map<String, Object> map = new HashMap<>();
         Map<String, List<AccountDto>> accountsByFirm = new HashMap<>();
 
         // 모든 증권사의 코드를 가져온다
         List<FirmDto> codes = service.getFirmObjects();
-        for (FirmDto dto : codes) {
+        for (FirmDto firmDto : codes) {
             // 각 증권사 별 계좌목록 리스트
-            List<AccountDto> list = service.getAccountsFromSingleFirm(userId, dto.getFirmCode());
-
+            List<AccountDto> list = service.getAccountsFromSingleFirm(userId, firmDto.getFirmCode());
             // 해당 증권사에 내 계좌가 존재한다면 취합한다.
-            if (list != null && list.size() != 0) {
-                accountsByFirm.put(dto.getFirmCode(), list);
+            if (list != null || list.size() != 0) {
+                for (int i = 0; i < list.size(); i++) {
+                    List<ProductDto> productDtos = service.getProductsFromRecords(list.get(i).getAccountNumber());
+                    list.get(i).setProductList(productDtos);
+                }
+                accountsByFirm.put(firmDto.getFirmName(), list);
             }
         }
 

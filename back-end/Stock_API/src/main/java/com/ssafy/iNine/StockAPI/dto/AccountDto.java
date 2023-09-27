@@ -3,6 +3,7 @@ package com.ssafy.iNine.StockAPI.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Getter
@@ -16,4 +17,6 @@ public class AccountDto {
     private String accountType; // 계좌종류
     private LocalDateTime issueDate; // 계좌개설일
     private boolean isTaxBenefits; // 세제혜택 적용여부
+
+    private List<ProductDto> productList;
 }
