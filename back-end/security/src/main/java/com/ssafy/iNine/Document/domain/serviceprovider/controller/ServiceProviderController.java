@@ -71,5 +71,11 @@ public class ServiceProviderController {
         return new DataResponse<>(200, "success", apiToken);
     }
 
-
+    @PostMapping("/token")
+    public DataResponse<?> setApiToken(Principal principal) {
+        Long serviceProviderId = Long.parseLong(principal.getName());
+        String token = serviceProviderService.setApiToken(serviceProviderId);
+        log.info(token);
+        return new DataResponse<>(201, "changed", token);
+    }
 }
