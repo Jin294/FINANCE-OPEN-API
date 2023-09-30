@@ -18,4 +18,12 @@ public class Firm {
     private String firmName;
 
     private String firmCode;
+
+    @Override
+    public String toString() {
+        return "Firm{" +
+                "firmName='" + firmName + '\'' +
+                ", firmCode='" + firmCode + '\'' +
+                '}';
+    }
 }

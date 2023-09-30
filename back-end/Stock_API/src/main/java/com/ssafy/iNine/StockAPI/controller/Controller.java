@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/invest")
@@ -157,11 +156,18 @@ public class Controller {
         return ResponseEntity.ok(map);
     }
 
-    @GetMapping("/find/{keyWord}")
-    public ResponseEntity<String> getFirmCodeFromKeyWord(@PathVariable String keyword) {
-        Optional<String> resultOptional = service.getFirmCodeFromKeyWord(keyword);
-
-        return resultOptional.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    /**
+     * 키워드를 포함하는 회사(증권사)이름을 검색해 해당 회사의 코드를 반환
+     * @param keyword 검색키워드
+     * @return orgCode
+     */
+    @GetMapping("/find/{keyword}")
+    public ResponseEntity<Map<String, Object>> getFirmCodeFromKeyWord(@PathVariable String keyword) {
+        Map<String, Object> map = new HashMap<>();
+        String orgName = service.getOrgNameFromKeyword(keyword);
+        String orgCode = service.getOrgCodeFromOrgName(orgName);
+        map.put("org_name", orgName);
+        map.put("org_code", orgCode);
+        return ResponseEntity.ok(map);
     }
 }

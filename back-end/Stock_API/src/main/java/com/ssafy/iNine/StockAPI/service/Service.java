@@ -1,9 +1,6 @@
 package com.ssafy.iNine.StockAPI.service;
 
-import com.ssafy.iNine.StockAPI.domain.Account;
-import com.ssafy.iNine.StockAPI.domain.Product;
-import com.ssafy.iNine.StockAPI.domain.TransactionRecord;
-import com.ssafy.iNine.StockAPI.domain.User;
+import com.ssafy.iNine.StockAPI.domain.*;
 import com.ssafy.iNine.StockAPI.dto.AccountDto;
 import com.ssafy.iNine.StockAPI.dto.ProductDto;
 import com.ssafy.iNine.StockAPI.dto.FirmDto;
@@ -195,7 +192,7 @@ public class Service {
                     .remainAmt(10_000_000.0)
                     .build();
 
-            accountTemplate.setAccountName(firmRepository.getFirmName(accountTemplate.getFirmCode()) + (int)(random() * 100 + 1));
+            accountTemplate.setAccountName(firmRepository.getFirmNameFromFirmCode(accountTemplate.getFirmCode()) + (int)(random() * 100 + 1));
             accountRepository.save(accountTemplate);
             makeRecords(userId, accountTemplate.getFirmCode(), accountTemplate.getAccountNumber());
         }
@@ -271,7 +268,11 @@ public class Service {
         }
     }
 
-    public Optional<String> getFirmCodeFromKeyWord(String keyword) {
-        return firmRepository.findFirmCodeByContainingKeyword(keyword);
+    public String getOrgNameFromKeyword(String keyword) {
+        return firmRepository.findFirmNameByContainingKeyword(keyword);
+    }
+
+    public String getOrgCodeFromOrgName(String orgName) {
+        return firmRepository.getFirmCodeFromFirmName(orgName);
     }
 }
