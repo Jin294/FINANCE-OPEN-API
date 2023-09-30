@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -31,20 +32,20 @@ public class Controller {
      * @return 해당 증권사에 존재하는 나의 계좌목록들
      */
     @GetMapping("/accounts/{userId}")
-    public ResponseEntity<Map<String, Object>> getAccountsByFirm(@PathVariable String userId, String orgCode, LocalDateTime searchTimeStamp, String nextPage, int limit) {
-        if (searchTimeStamp == null) {
+    public ResponseEntity<Map<String, Object>> getAccountsByFirm(@PathVariable String userId, HttpServletRequest request) {
+        String orgCode = request.getParameter("orgCode");
+        LocalDateTime searchTimeStamp;
+        if (request.getParameter("searchTimeStamp") == null) {
             searchTimeStamp = LocalDateTime.now();
+        } else {
+            searchTimeStamp = service.getTimeFromString(request.getParameter("searchTimeStamp"));
         }
-        if (nextPage == null) {
-            nextPage = "1";
-        }
-        if (limit == 0) {
-            limit = 1;
-        }
+        String nextPage = request.getParameter("nextPage") != null ? request.getParameter("nextPage") : "1";
+        String limit = request.getParameter("limit") != null ? request.getParameter("limit") : "1";
+
         System.out.println("userId = " + userId + ", orgCode = " + orgCode + ", searchTimeStamp = " + searchTimeStamp + ", nextPage = " + nextPage + ", limit = " + limit);
         Map<String, Object> map = new HashMap<>();
         List<AccountDto> accounts = service.getAccountsFromSingleFirm(userId, orgCode);
-//        System.out.println("accounts : " + accounts.get(0));
 
         // rsp_code : 세부 응답코드
         map.put("rsp_code", 00000);
@@ -76,18 +77,13 @@ public class Controller {
     /**
      * 마이데이터 표준 : /v1/invest/accounts/products
      * 정보주체가 보유한 계좌에 포함된 상품의 조회 시점 기준 상세 정보 조회
-     * @param userId 고객 고유번호
-     * @param orgCode
-     * @param accountNum
-     * @param searchTimestamp
-     * @param nextPage
-     * @param limit
+     * @param requestDto
      * @return
      */
     @PostMapping("/accounts/detail")
-    public ResponseEntity<Map<String, Object>> getAccountDetail(String userId, String orgCode, String accountNum, String searchTimestamp, String nextPage, String limit) {
+    public ResponseEntity<Map<String, Object>> getAccountDetail(@RequestBody AccountDetailRequestDto requestDto) {
         Map<String, Object> map = new HashMap<>();
-        List<ProductDto> products = service.getProductsFromRecords(accountNum);
+        List<ProductDto> products = service.getProductsFromRecords(requestDto.getAccountNum());
 
         map.put("rsp_code", 00000);
         map.put("rsp_msg", "성공");
@@ -133,20 +129,20 @@ public class Controller {
     /**
      * 마이데이터 표준 : /v1/invest/accounts/transactions
      * fromDate와 toDate 사이의 거래내역 조회
-     * @param userId
-     * @param orgCode
-     * @param accountNum
-     * @param fromDate
-     * @param toDate
-     * @param nextPage
-     * @param limit
+     * @param requestDto
      * @return
      */
     @PostMapping("/transRecord")
-    public ResponseEntity<Map<String, Object>> getTransactions(String userId, String orgCode, String accountNum, LocalDateTime fromDate, LocalDateTime toDate, String nextPage, String limit) {
+    public ResponseEntity<Map<String, Object>> getTransactions(@RequestBody TransactionRecordRequestDto requestDto) {
         Map<String, Object> map = new HashMap<>();
 
-        List<TransactionRecordDto> list = service.getRecords(orgCode, accountNum, fromDate, toDate);
+        System.out.println(requestDto.toString());
+
+        List<TransactionRecordDto> list = service.getRecords(
+                requestDto.getOrgCode(),
+                requestDto.getAccountNum(),
+                service.getTimeFromString(requestDto.getFromDate()),
+                service.getTimeFromString(requestDto.getToDate()));
 
         map.put("rsp_code", 00000);
         map.put("rsp_msg", "성공");
@@ -157,6 +153,7 @@ public class Controller {
     }
 
     /**
+     * 우리 서비스 오리지널
      * 키워드를 포함하는 회사(증권사)이름을 검색해 해당 회사의 코드를 반환
      * @param keyword 검색키워드
      * @return orgCode

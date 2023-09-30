@@ -9,6 +9,7 @@ import com.ssafy.iNine.StockAPI.repository.*;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -274,5 +275,9 @@ public class Service {
 
     public String getOrgCodeFromOrgName(String orgName) {
         return firmRepository.getFirmCodeFromFirmName(orgName);
+    }
+
+    public LocalDateTime getTimeFromString(String str) {
+        return LocalDateTime.parse(str, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }

@@ -1,12 +1,11 @@
 package com.ssafy.iNine.StockAPI.dto;
 
 import lombok.Getter;
-import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class RequestDto {
+public class AccountDetailRequestDto {
     private String orgCode;
     private String accountNum;
     private LocalDateTime searchTimestamp;
