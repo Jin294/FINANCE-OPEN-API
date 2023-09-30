@@ -1,6 +1,7 @@
 package com.iNine.resource.domain.mydata;
 
 import com.iNine.resource.domain.mydata.dto.CardDto;
+import com.iNine.resource.domain.mydata.service.MyDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,9 @@ public class MyDataController {
     @GetMapping("/transaction")
     public Mono<CardDto.ApprovedInfoResponse> getCardTransactionInfo(@RequestParam Long cardId, @RequestParam String orgCode,
                                                                  @RequestParam String fromDate, @RequestParam String toDate,
-                                                                 @RequestParam String nextPage, @RequestParam int limit){
+                                                                 @RequestParam(required = false) String nextPage, @RequestParam int limit){
+
+        log.info("nextPage:{}", nextPage);
         return myDataService.getCardTransactionInfo(cardId, orgCode, fromDate, toDate, nextPage, limit).doOnSuccess(result -> {
                     log.info("result:{}", result);
                 })

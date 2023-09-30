@@ -21,7 +21,7 @@ public class CardDto {
     @Getter
     @Setter
     public static class CardInfoData {
-        private int nextPage;
+        private String nextPage;
         private int cardCnt;
         private List<CardInfo> cardList;
     }
@@ -48,7 +48,7 @@ public class CardDto {
     @Getter
     @Setter
     public static class ApprovedInfoData {
-        private int nextPage;
+        private String nextPage;
         private int cardCnt;
         private List<ApprovedInfo> approvedList;
     }

@@ -23,7 +23,7 @@ public class Oauth2ResourceConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/main", "/api/cards/**")
+                .antMatchers("/main", "/api/cards/**", "/api/stock/**")
                 .access("#oauth2.hasAnyScope('read')")
                 .anyRequest()
                 .permitAll();

@@ -1,4 +1,4 @@
-package com.iNine.resource.domain.mydata;
+package com.iNine.resource.domain.mydata.service;
 
 import com.iNine.resource.domain.mydata.dto.CardDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,7 @@ public class MyDataService {
     public Mono<CardDto.ApprovedInfoResponse> getCardTransactionInfo(Long cardId, String orgCode, String fromDate, String toDate, String nextPage, int limit) {
 
         return webClient.get().uri(uriBuilder -> uriBuilder
-                        .path("/cards")
+                        .path("/cards/transaction")
                         .queryParam("cardId", cardId)
                         .queryParam("orgCode", orgCode)
                         .queryParam("fromDate", fromDate)
