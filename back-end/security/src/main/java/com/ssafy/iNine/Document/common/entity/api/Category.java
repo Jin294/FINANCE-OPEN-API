@@ -10,19 +10,14 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-@Table(name="api_data")
-public class ApiData {
+@Table(name="api_category")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "request_id")
-    private Long requestId;
-    @JoinColumn(name = "api_docs_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Api api;
+    @Column(name = "api_category_id")
+    private Long ApiCategoryId;
+    @Column(length = 256)
     private String title;
-    private String type;
+    @Column(length = 1000)
     private String detail;
-    private Boolean isEssential;
-    private Boolean isRequest;
-
 }

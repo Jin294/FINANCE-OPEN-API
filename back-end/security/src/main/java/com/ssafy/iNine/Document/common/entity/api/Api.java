@@ -30,4 +30,10 @@ public class Api {
     private String authorization;
     @OneToMany(mappedBy = "api", fetch = FetchType.LAZY)
     private List<ApiData> apiData = new ArrayList<>();
+    @JoinColumn(name = "api_category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
+
+    @Column(name = "return_example", columnDefinition = "TEXT")
+    private String returnExample;
 }
