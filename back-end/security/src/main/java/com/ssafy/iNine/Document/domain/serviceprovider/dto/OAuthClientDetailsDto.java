@@ -25,6 +25,7 @@ public class OAuthClientDetailsDto {
         private String web_server_redirect_uri;
         private String additional_information;
         private String client_id;
+        private String client_secret;
         private String scope;
         private String authorized_grant_types;
 
@@ -33,6 +34,7 @@ public class OAuthClientDetailsDto {
                     .web_server_redirect_uri(oAuthClientDetails.getWebServerRedirectUri())
                     .additional_information(oAuthClientDetails.getAdditionalInformation())
                     .client_id(oAuthClientDetails.getClientId())
+                    .client_secret(oAuthClientDetails.getClientSecret())
                     .scope(oAuthClientDetails.getScope())
                     .authorized_grant_types(oAuthClientDetails.getAuthorizedGrantTypes())
                     .build();
