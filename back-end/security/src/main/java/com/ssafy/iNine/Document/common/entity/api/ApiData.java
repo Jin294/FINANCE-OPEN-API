@@ -22,7 +22,10 @@ public class ApiData {
     private String title;
     private String type;
     private String detail;
+    @Column(name="is_essential")
     private Boolean isEssential;
+    @Column(name="is_request")
     private Boolean isRequest;
-
+    @Column(name="is_parameter")
+    private Boolean isParameter;
 }

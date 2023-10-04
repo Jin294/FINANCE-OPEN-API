@@ -1,6 +1,7 @@
 package com.ssafy.iNine.Document.domain.api.dto;
 
 import com.ssafy.iNine.Document.common.entity.api.Api;
+import com.ssafy.iNine.Document.common.entity.api.Category;
 import lombok.*;
 
 import java.util.List;
@@ -8,7 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ApiDocsDto {
-
     @Getter
     @Setter
     @Builder
@@ -18,12 +18,14 @@ public class ApiDocsDto {
         private Long api_docs_id;
         private String title;
         private String content;
+        private Category category;
 
         public static Info of(Api api) {
             return Info.builder()
                     .api_docs_id(api.getApiDocsId())
                     .title(api.getTitle())
                     .content(api.getContent())
+                    .category(api.getCategory())
                     .build();
         }
     }
@@ -41,7 +43,9 @@ public class ApiDocsDto {
         private String return_type;
         private String content_type;
         private String authorization;
-        List<ApiData> apiData;
+        private String endpoint;
+        private String return_example;
+        List<ApiData> api_data;
 
         public static DetailInfo of(Api api, List<ApiData> apiData) {
             return DetailInfo.builder()
@@ -52,7 +56,9 @@ public class ApiDocsDto {
                     .content_type(api.getContentType())
                     .method(api.getMethod())
                     .return_type(api.getReturnType())
-                    .apiData(apiData)
+                    .api_data(apiData)
+                    .endpoint(api.getEndpoint())
+                    .return_example(api.getReturnExample())
                     .build();
         }
     }
@@ -63,11 +69,11 @@ public class ApiDocsDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ApiData {
-        private Integer request_id;
         private String title;
         private String type;
         private String detail;
         private Boolean is_essential;
-        private Boolean is_Request;
+        private Boolean is_request;
+        private Boolean is_parameter;
     }
 }

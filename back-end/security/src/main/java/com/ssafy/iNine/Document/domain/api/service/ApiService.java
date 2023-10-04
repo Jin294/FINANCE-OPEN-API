@@ -41,7 +41,8 @@ public class ApiService {
                     .type(apiData.getType())
                     .detail(apiData.getDetail())
                     .is_essential(apiData.getIsEssential())
-                    .is_Request(apiData.getIsRequest())
+                    .is_request(apiData.getIsRequest())
+                    .is_parameter(apiData.getIsParameter())
                     .build();
 
             apiDataList.add(data);
