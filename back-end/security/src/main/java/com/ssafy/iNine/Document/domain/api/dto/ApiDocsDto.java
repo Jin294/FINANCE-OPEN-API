@@ -18,14 +18,12 @@ public class ApiDocsDto {
         private Long api_docs_id;
         private String title;
         private String content;
-        private Category category;
 
         public static Info of(Api api) {
             return Info.builder()
                     .api_docs_id(api.getApiDocsId())
                     .title(api.getTitle())
                     .content(api.getContent())
-                    .category(api.getCategory())
                     .build();
         }
     }
