@@ -48,7 +48,7 @@ public class Controller {
         List<AccountDto> accounts = service.getAccountsFromSingleFirm(userId, orgCode);
 
         // rsp_code : 세부 응답코드
-        map.put("rsp_code", 00000);
+        map.put("rsp_code", "00000");
         map.put("rsp_msg", "성공");
         map.put("search_timestamp", 0);
         map.put("next_page", 0);
@@ -98,7 +98,7 @@ public class Controller {
 
     /**
      * 우리 서비스 오리지널
-     * 모든 증권사의 내 투자정보를 한 번에 조회
+     * 모든 증권사에 존재하는 계좌목록 및 상품정보를 한 번에 조회
      * @param userId
      * @return
      */
