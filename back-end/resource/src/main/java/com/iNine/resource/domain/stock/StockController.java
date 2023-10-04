@@ -54,7 +54,7 @@ public class StockController {
         String userId = principal.getName().toString();
 //        String userId = "acrow0330@naver.com";
         StockRequestDto.WebClientRequestBody webClientBody = stockRequestDto.getWebClientBody();
-        webClientBody.setUserId(userId);
+        webClientBody.setUser_id(userId);
         return stockService.getStockInfo(webClientBody).doOnSuccess(result -> {
                     log.info("result:{}", result);
                 })
