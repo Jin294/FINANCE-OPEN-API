@@ -33,19 +33,19 @@ public class StockDto {
     @Getter
     @Setter
     public static class Transaction {
-        private String prodName;
-        private String prodCode;
-        private String transDtime;
-        private String transNo;
-        private String transType;
-        private String transTypeDetail;
-        private double transNum;
-        private double baseAmt;
-        private double transAmt;
-        private double settleAmt;
-        private double balanceAmt;
-        private String currencyCode;
-        private String exCode;
+        private String prod_name;
+        private String prod_code;
+        private String trans_dtime;
+        private String trans_no;
+        private String trans_type;
+        private String trans_type_detail;
+        private double trans_num;
+        private double base_amt;
+        private double trans_amt;
+        private double settle_amt;
+        private double balance_amt;
+        private String currency_code;
+        private String ex_code;
     }
 
     @Getter
@@ -69,18 +69,18 @@ public class StockDto {
     @Getter
     @Setter
     public static class ProductInfo {
-        private String prodType;
-        private String prodTypeDetail;
-        private String prodCode;
-        private String exCode;
-        private String prodName;
-        private String posType;
-        private String creditType;
-        private double purchaseAmt;
-        private int holdingNum;
-        private double evalAmt;
-        private String currencyCode;
-        private boolean taxBenefits;
+        private String prod_type;
+        private String prod_type_detail;
+        private String prod_code;
+        private String ex_code;
+        private String prod_name;
+        private String pos_type;
+        private String credit_type;
+        private double purchase_amt;
+        private int holding_num;
+        private double eval_amt;
+        private String currency_code;
+        private boolean is_tax_benefits;
     }
 
     @Getter
@@ -97,13 +97,13 @@ public class StockDto {
     @Getter
     @Setter
     public static class AccountInfo {
-        private String accountNumber;
-        private String accountName;
-        private String accountType;
-        private LocalDateTime issueDate;
-        private List<ProductInfo> productList;
-        private Boolean consent;
-        private Boolean taxBenefits;
+        private String account_number;
+        private String account_name;
+        private String account_type;
+        private LocalDateTime issue_date;
+        private List<ProductInfo> product_list;
+        private Boolean is_consent;
+        private Boolean is_tax_benefits;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -122,12 +122,12 @@ public class StockDto {
     @Getter
     @Setter
     public static class Account {
-        private String accountNumber;
-        private String accountName;
-        private String accountType;
-        private String issueDate;
-        private List<String> productList;
-        private boolean consent;
-        private boolean taxBenefits;
+        private String account_number;
+        private String account_name;
+        private String account_type;
+        private String issue_date;
+        private List<String> product_list;
+        private boolean is_consent;
+        private boolean is_tax_benefits;
     }
 }
