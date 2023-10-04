@@ -82,7 +82,7 @@ public class Service {
             List<AccountDto> list = getAccountsFromSingleFirm(userId, dto.getFirmCode());
             // 해당 증권사에 내 계좌가 존재한다면 취합한다.
             if (list != null && list.size() != 0) {
-                result.put(dto.getFirmName(), list);
+                result.put(dto.getFirmCode(), list);
             }
         }
 
