@@ -17,8 +17,8 @@ const ExCardContent = () => {
     const getCardContent = async () => {
       try {
         const res = await basicHttp.get(`/oauth/access-token?code=${code}`);
-        
-		console.log(accessToken);
+
+        console.log(accessToken);
         const res2 = await basicHttp.get(
           `https://j9b309.p.ssafy.io/api/cards?orgCode=exampleOrgcode&limit=10`,
           {
@@ -28,15 +28,15 @@ const ExCardContent = () => {
           }
         );
         setCardList(res2.data.data.cardList);
-		console.log(res.data.access_token);
-		setAccessToken(res.data.access_token); // 액세스 토큰을 상태로 저장
+        console.log(res.data.access_token);
+        setAccessToken(res.data.access_token); // 액세스 토큰을 상태로 저장
       } catch (error) {}
     };
     getCardContent();
   }, [code]); // 코드가 변경될 때마다 액세스 토큰을 다시 가져오도록 설정
 
   const handleCardClick = async (cardId) => {
-	console.log(accessToken);
+    console.log(accessToken);
     try {
       const res = await basicHttp.get(
         `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21&limit=10`,
@@ -72,9 +72,11 @@ const ExCardContent = () => {
             className={`${styles.chartBox} ${styles.chatBox1}`}
             onClick={() => handleCardClick(card.cardId)}
           >
-            <div className={`${styles.chartNumber} ${styles.chartNumber1}`}></div>
+            <div
+              className={`${styles.chartNumber} ${styles.chartNumber1}`}
+            ></div>
             <div className={`${styles.chartCover} ${styles.chartCover1}`}>
-              <img src={cardImages[Math.floor(Math.random() * cardImages.length)]} alt={card.cardName} />
+              <img src={cardImages[index]} alt={card.cardName} />
             </div>
             <div className={`${styles.chartName} ${styles.chartName1}`}>
               <span>{card.cardName}</span>
@@ -88,20 +90,26 @@ const ExCardContent = () => {
         ))}
 
         {selectedCardId && (
-          <div className={styles.transactionContainer}>
-            <h2>선택한 카드의 거래 내역</h2>
-            <ul>
-              {approvedList.map((transaction, index) => (
-                <li key={index}>
-                  {transaction.transactionId}
-				  {transaction.approvedNum}
-				  {transaction.approvedDtime}
-				  {transaction.status}
-
-                  {/* 거래 내역의 다른 정보를 표시하려면 여기에 추가 */}
-                </li>
-              ))}
-            </ul>
+          <div className={styles.table}>
+            <h2>카드 국내 승인 내역</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>승인 시간</th>
+                  <th>가맹점</th>
+                  <th>승인 금액</th>
+                </tr>
+              </thead>
+              <tbody>
+                {approvedList.map((transaction, index) => (
+                  <tr key={index}>
+                    <td>{transaction.approvedDtime}</td>
+                    <td>{transaction.merchantName}</td>
+                    <td>{transaction.approvedAmt}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
