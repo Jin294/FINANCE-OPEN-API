@@ -70,7 +70,7 @@ public class Controller {
         Map<String, List<AccountDto>> mmp = service.getAccountsFromAllFirms(userId, firmList);
 
         // myAccounts 내에 증권사 코드별로 계좌번호가 취합됨
-        map.put("myAccounts", mmp);
+        map.put("my_accounts", mmp);
         return ResponseEntity.ok(map);
     }
 
