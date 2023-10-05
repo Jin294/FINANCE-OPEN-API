@@ -64,29 +64,29 @@ const ExCardContent = () => {
         <div className={styles.chartTitle}>
           <h1>카드 내역</h1>
         </div>
-		
+
         {cardList.map((card, index) => (
           <div
             key={index}
             className={`${styles.chartBox} ${styles.chatBox1}`}
             onClick={() => handleCardClick(card.cardId)}
           >
-			<div className={styles.cardContent}>
-            <div
-              className={`${styles.chartNumber} ${styles.chartNumber1}`}
-            ></div>
-            <div className={`${styles.chartCover} ${styles.chartCover1}`}>
-              <img src={cardImages[index]} alt={card.cardName} />
-            </div>
-            <div className={`${styles.chartName} ${styles.chartName1}`}>
-              <span>{card.cardName}</span>
-              <div className={styles.priceContainer}>
-                <div className={styles.priceTitle}>카드 번호</div>
-                <div className={styles.priceContent}>{card.cardNum}</div>
+            <div className={styles.cardContent}>
+              <div
+                className={`${styles.chartNumber} ${styles.chartNumber1}`}
+              ></div>
+              <div className={`${styles.chartCover} ${styles.chartCover1}`}>
+                <img src={cardImages[index]} alt={card.cardName} />
               </div>
-              <div className={styles.separator}></div>
+              <div className={`${styles.chartName} ${styles.chartName1}`}>
+                <span>{card.cardName}</span>
+                <div className={styles.priceContainer}>
+                  <div className={styles.priceTitle}>카드 번호</div>
+                  <div className={styles.priceContent}>{card.cardNum}</div>
+                </div>
+                <div className={styles.separator}></div>
+              </div>
             </div>
-			</div>
             {selectedCardId === card.cardId && (
               <div className={styles.table}>
                 <h2>카드 승인 내역</h2>
@@ -102,9 +102,9 @@ const ExCardContent = () => {
                     {approvedList.map((transaction, index) => (
                       <tr key={index}>
                         <td>
-                          {transaction.transDtime === null
-                            ? transaction.approvedDtime.slice(0, 10)
-                            : transaction.transDtime.slice(0, 10)}
+                          {transaction.transDtime !== null
+                            ? transaction.transDtime.slice(0, 10)
+                            : transaction.approvedDtime.slice(0, 10)}
                         </td>
                         <td>{transaction.merchantName}</td>
                         <td>
