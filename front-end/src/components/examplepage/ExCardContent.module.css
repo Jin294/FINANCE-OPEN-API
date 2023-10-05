@@ -156,9 +156,7 @@
 	flex-direction: column;
 }
 
-.table tr {
-	text-align: center;
-}
+
 
 .table th {
     background-color: #f0f0f0; 
@@ -166,6 +164,7 @@
     text-align: left;
     padding: 10px;
     border-bottom: 2px solid #ccc;
+	text-align: center;
 }
 
 .table td {
