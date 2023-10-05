@@ -93,7 +93,11 @@ const ExCardContent = () => {
             <ul>
               {approvedList.map((transaction, index) => (
                 <li key={index}>
-                  거래 내역: {transaction}
+                  {transaction.transactionId}
+				  {transaction.approvedNum}
+				  {transaction.approvedDtime}
+				  {transaction.status}
+
                   {/* 거래 내역의 다른 정보를 표시하려면 여기에 추가 */}
                 </li>
               ))}
