@@ -30,7 +30,7 @@ public class CardTransactionController {
     ) {
         Timestamp fromDate = Timestamp.valueOf(fromDateStr + " 00:00:00");
         Timestamp toDate = Timestamp.valueOf(toDateStr + " 23:59:59");
-
+        if(nextPage == null) nextPage = "";
         CardTransactionDto.CardTransactionRequestDto CardTransactionRequestDto = CardTransactionDto.CardTransactionRequestDto.builder()
                 .cardId(cardId)
                 .orgCode(orgCode)
