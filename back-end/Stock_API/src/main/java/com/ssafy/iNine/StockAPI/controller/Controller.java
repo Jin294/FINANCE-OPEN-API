@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/invest")
+@RequestMapping("/stock")
 @RequiredArgsConstructor
 public class Controller {
 
@@ -75,7 +75,7 @@ public class Controller {
     }
 
     /**
-     * 마이데이터 표준 : /v1/invest/accounts/products
+     * 마이데이터 표준 : /v1/invest/acounts/products
      * 정보주체가 보유한 계좌에 포함된 상품의 조회 시점 기준 상세 정보 조회
      * @param requestDto
      * @return
