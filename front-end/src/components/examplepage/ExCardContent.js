@@ -18,6 +18,7 @@ const ExCardContent = () => {
       try {
         const res = await basicHttp.get(`/oauth/access-token?code=${code}`);
         setAccessToken(res.data.access_token); // 액세스 토큰을 상태로 저장
+		console.log(accessToken);
         const res2 = await basicHttp.get(
           `https://j9b309.p.ssafy.io/api/cards?orgCode=exampleOrgcode&limit=10`,
           {
@@ -27,6 +28,7 @@ const ExCardContent = () => {
           }
         );
         setCardList(res2.data.data.cardList);
+		console.log(res.data.access_token);
       } catch (error) {}
     };
     getCardContent();
