@@ -30,7 +30,7 @@ public class DummyServerController {
             setScope("read");
         }};
 
-        HttpResponse<OauthToken.response> response = Unirest.post("http://localhost:3000"+"/oauth/token")
+        HttpResponse<OauthToken.response> response = Unirest.post(hostUrl+"/oauth/token")
                 .header("Authorization", "Basic " + encodingCredentials)
                 .fields(request.getMapData())
                 .asObject(OauthToken.response.class);
