@@ -1,19 +1,21 @@
-.backBody {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
+/*src/components/ServiceInfo.module.css*/
 
-  /*
+.backBody {
+	background-color: #282c34;
+	min-height: 100vh;
+	display: flex;
+
+	/*
       메인화면 배경 도형
     */
-  background-image: url("../../assets/img/background.png");
-  background-size: cover;
+	background-image: url("../../assets/img/background.png");
+	background-size: cover;
 }
 
 .boardContainer {
-  position: relative;
-  min-height: 95vh;
-  /* margin-top: 5vh;
+	position: relative;
+	min-height: 95vh;
+	/* margin-top: 5vh;
   background-color: white;
   margin-left: 130px;
   margin-right: 130px;
@@ -24,66 +26,63 @@
   align-items: center;
   padding-top: 70px; */
 
-  background-color: rgba(240, 240, 240, 0.3);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  width: 1100px;
-  margin: 20px auto;
+	background-color: rgba(240, 240, 240, 0.3);
+	border-radius: 10px;
+	padding: 20px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	width: 1100px;
+	margin: 20px auto;
 }
 
 .boardTop {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  color: white;
-  border-bottom: 2px solid white;
-  padding-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
+	color: white;
+	border-bottom: 2px solid white;
+	padding-bottom: 10px;
 }
 
 .cardList {
-  padding-top: 40px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  grid-column-gap: 0px; 
-  grid-row-gap: 80px; 
-  justify-content: center;
-  align-items: center;
-  
-  
-  
+	padding-top: 40px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-column-gap: 0px;
+	grid-row-gap: 80px;
+	justify-content: center;
+	align-items: center;
 }
 
 .card {
-  background-color: #282c34;
-  color: white;
-  border-radius: 8px;
-  padding: 24px;
-  margin: 8px auto 8px auto; 
-  display: flex;
-  flex-direction: column;
-  width: 360px;
-  height: 270px;
-  position: relative;
-  line-height: 1.7;
-  word-break: keep-all;
-  
+	background-color: #282c34;
+	color: white;
+	border-radius: 8px;
+	padding: 24px;
+	margin: 8px auto 8px auto;
+	display: flex;
+	flex-direction: column;
+	width: 360px;
+	height: 270px;
+	position: relative;
+	line-height: 1.7;
+	word-break: keep-all;
 }
 
+.buttonContainer {
+	display: flex;
+	justify-content: space-evenly;
+
+	position: absolute;
+	bottom: 16px;
+	left: 50%;
+	transform: translateX(-50%);
+}
 .button {
-  background-color: #353b45; 
-  color: #d6dae1; 
-  width: 80px;
+	background-color: #353b45;
+	color: #d6dae1;
+	width: 80px;
 
-  text-align: center; 
-  position: absolute; 
-  bottom: 16px;
-  left: 50%; 
-  transform: translateX(-50%); 
+	text-align: center;
+	margin: 0 4px;
 }
-
-
-
-
-
