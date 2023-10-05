@@ -142,12 +142,13 @@
 }
 
 .table {
-    width: 760px;
+    width: 680px;
     border-collapse: collapse;
     border-spacing: 0;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
     word-break: keep-all;
     line-height: 1.5;
+	text-align: center;
 }
 
 .table th {
@@ -163,13 +164,13 @@
     border-bottom: 1px solid #ccc;
 }
 .table td:nth-child(1) {
-    width: 20%;
+    width: 30%;
 }
 .table td:nth-child(2) {
-    width: 20%;
+    width: 30%;
 }
 .table td:nth-child(3) {
-    width: 60%;
+    width: 40%;
 }
 
 /* Mobile devices */
