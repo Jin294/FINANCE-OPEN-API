@@ -241,6 +241,7 @@ public class Service {
                     .baseAmt(baseAmt)
                     .transAmt(total)
                     .settleAmt(total)
+                    .currencyCode("KRW")
                     .balanceAmt(account.getRemainAmt())
                     .build();
 
