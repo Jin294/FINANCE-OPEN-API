@@ -103,10 +103,9 @@ const ExCardContent = () => {
                       <tr key={index}>
                         <td>
                           {transaction.transDtime === null
-                            ? transaction.approvedDtime
-                            : transaction.transDtime}
+                            ? transaction.approvedDtime.slice(0, 10)
+                            : transaction.transDtime.slice(0, 10)}
                         </td>
-                        console.log(transaction.transDtime);
                         <td>{transaction.merchantName}</td>
                         <td>
                           {transaction.transDtime ? "+" : "-"}
