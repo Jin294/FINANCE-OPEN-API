@@ -1,177 +1,98 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import styles from "./ExCardContent.module.css";
-import KB1 from "../../assets/img/KB1.PNG";
-import KB2 from "../../assets/img/KB2.PNG";
-import KB3 from "../../assets/img/KB3.PNG";
-import HD1 from "../../assets/img/HD1.PNG";
-
 import basicHttp from "../../api/basicHttp";
 import tokenHttp from "../../api/tokenHttp";
 
 const ExCardContent = () => {
-	const [searchParams, setSearchParams] = useSearchParams();
-	const code = searchParams.get("code");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const code = searchParams.get("code");
 
-	const [cardList, setCardList] = useState([]);
+  const [cardList, setCardList] = useState([]);
+  const [selectedCardId, setSelectedCardId] = useState(null);
+  const [cardTransactions, setCardTransactions] = useState([]);
 
-	useEffect(() => {
-		const getcardContent = async () => {
-			try {
-				const res = await basicHttp.get(`/oauth/access-token?code=${code}`);
-				console.log(res.data);
-				const res2 = await basicHttp.get(
-					`https://j9b309.p.ssafy.io/api/cards?orgCode=exampleOrgcode&limit=10`,
-					{
-						headers: {
-							Authorization: `Bearer ${res.data.access_token}`, // Bearer 토큰 포함
-						},
-					}
-				);
-				console.log(res2.data);
-				setCardList(res2.data.data.cardList);
-			} catch (error) {}
-		};
-		getcardContent();
-	}, []);
+  useEffect(() => {
+    const getCardContent = async () => {
+      try {
+        const res = await basicHttp.get(`/oauth/access-token?code=${code}`);
+        const res2 = await basicHttp.get(
+          `https://j9b309.p.ssafy.io/api/cards?orgCode=exampleOrgcode&limit=10`,
+          {
+            headers: {
+              Authorization: `Bearer ${res.data.access_token}`,
+            },
+          }
+        );
+        setCardList(res2.data.data.cardList);
+      } catch (error) {}
+    };
+    getCardContent();
+  }, []);
 
-	// exchangeAllList 배열의 길이가 3보다 크거나 같을 때만 해당 값을 사용
-	const isCardListExisted = cardList.length ? true : false;
+  const handleCardClick = async (cardId) => {
+    try {
+      const res = await tokenHttp.get(
+        `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21`
+      );
+      setCardTransactions(res.data); // 거래 내역을 상태에 저장
+      setSelectedCardId(cardId); // 선택한 카드의 ID를 상태에 저장
+    } catch (error) {}
+  };
 
-	return (
-		<div className={styles.chartContainer}>
-			<div className={styles.chartCard}>
-				<div className={styles.chartTitle}>
-					<h1>카드 내역</h1>
-				</div>
+  const cardImages = [
+    require("../../assets/img/KB1.PNG"),
+    require("../../assets/img/KB2.PNG"),
+    require("../../assets/img/KB3.PNG"),
+    require("../../assets/img/HD1.PNG"),
+    // 여기에 추가 이미지를 넣으세요...
+  ];
 
-				<div className={`${styles.chartBox} ${styles.chatBox1}`}>
-					<div className={`${styles.chartNumber} ${styles.chartNumber1}`}></div>
-					<div className={`${styles.chartCover} ${styles.chartCover1}`}>
-						<img src={KB1} alt="03" />
-					</div>
-					{/* <!-- Name --> */}
-					<div className={`${styles.chartName} ${styles.chartName1}`}>
-						{/* isCardListExisted null이 아닐 때만 해당 값을 출력 */}
-						{isCardListExisted && <span> {cardList[0].cardName}</span>}
-						<div className={styles.priceContainer}>
-							<div className={styles.priceTitle}>카드 번호</div>
-							{isCardListExisted && (
-								<div className={styles.priceContent}>{cardList[0].cardNum}</div>
-							)}
-						</div>
-						<div className={styles.separator}></div>
-						{/* <div className={styles.priceContainer}>
-                            <div className={styles.priceTitle}>현찰 팔 때</div>
-                            {isCardListExisted && (
-                                <div className={styles.priceContent}>{exchangeAllList[2].cashSellPrice}</div>
-                            )}
-                        </div> */}
-					</div>
-					{/* <!-- Button --> */}
-					{/* <div className={styles.link}>
-                        <a href="https://www.youtube.com/watch?v=wnJ6LuUFpMo">Listen</a>
-                    </div> */}
-				</div>
+  return (
+    <div className={styles.chartContainer}>
+      <div className={styles.chartCard}>
+        <div className={styles.chartTitle}>
+          <h1>카드 내역</h1>
+        </div>
 
-				{/* <!-- Separator --> */}
-				<div className={styles.separator}></div>
+        {cardList.map((card, index) => (
+          <div
+            key={index}
+            className={`${styles.chartBox} ${styles.chatBox1}`}
+            onClick={() => handleCardClick(card.cardId)} // 카드 클릭 핸들러 추가
+          >
+            <div className={`${styles.chartNumber} ${styles.chartNumber1}`}></div>
+            <div className={`${styles.chartCover} ${styles.chartCover1}`}>
+              {/* 랜덤 이미지 선택 */}
+              <img src={cardImages[Math.floor(Math.random() * cardImages.length)]} alt={card.cardName} />
+            </div>
+            <div className={`${styles.chartName} ${styles.chartName1}`}>
+              <span>{card.cardName}</span>
+              <div className={styles.priceContainer}>
+                <div className={styles.priceTitle}>카드 번호</div>
+                <div className={styles.priceContent}>{card.cardNum}</div>
+              </div>
+              <div className={styles.separator}></div>
+            </div>
+          </div>
+        ))}
 
-				<div className={`${styles.chartBox} ${styles.chatBox1}`}>
-					<div className={`${styles.chartNumber} ${styles.chartNumber1}`}></div>
-					<div className={`${styles.chartCover} ${styles.chartCover1}`}>
-						<img src={KB2} alt="03" />
-					</div>
-					{/* <!-- Name --> */}
-					<div className={`${styles.chartName} ${styles.chartName1}`}>
-						{isCardListExisted && <span> {cardList[1].cardName}</span>}
-						<div className={styles.priceContainer}>
-							<div className={styles.priceTitle}>카드 번호</div>
-							{isCardListExisted && (
-								<div className={styles.priceContent}>{cardList[1].cardNum}</div>
-							)}
-						</div>
-						<div className={styles.separator}></div>
-						{/* <div className={styles.priceContainer}>
-                            <div className={styles.priceTitle}>현찰 팔 때</div>
-                            {isCardListExisted && (
-                                <div className={styles.priceContent}>{exchangeAllList[3].cashSellPrice}</div>
-                            )}
-                        </div> */}
-					</div>
-					{/* <!-- Button --> */}
-					{/* <div className={styles.link}>
-                        <a href="https://www.youtube.com/watch?v=wnJ6LuUFpMo">Listen</a>
-                    </div> */}
-				</div>
-
-				{/* <!-- Separator --> */}
-				<div className={styles.separator}></div>
-
-				<div className={`${styles.chartBox} ${styles.chatBox1}`}>
-					<div className={`${styles.chartNumber} ${styles.chartNumber1}`}></div>
-					<div className={`${styles.chartCover} ${styles.chartCover1}`}>
-						<img src={KB3} alt="03" />
-					</div>
-					{/* <!-- Name --> */}
-					<div className={`${styles.chartName} ${styles.chartName1}`}>
-						{isCardListExisted && <span> {cardList[2].cardName}</span>}
-						<div className={styles.priceContainer}>
-							<div className={styles.priceTitle}>카드 번호</div>
-							{isCardListExisted && (
-								<div className={styles.priceContent}>{cardList[2].cardNum}</div>
-							)}
-						</div>
-						<div className={styles.separator}></div>
-						{/* <div className={styles.priceContainer}>
-                            <div className={styles.priceTitle}>현찰 팔 때</div>
-                            {isCardListExisted && (
-                                <div className={styles.priceContent}>{exchangeAllList[0].cashSellPrice}</div>
-                            )}
-                        </div> */}
-					</div>
-					{/* <!-- Button --> */}
-					{/* <div className={styles.link}>
-                        <a href="https://www.youtube.com/watch?v=wnJ6LuUFpMo">Listen</a>
-                    </div> */}
-				</div>
-
-				{/* <!-- Separator --> */}
-				<div className={styles.separator}></div>
-
-				<div className={`${styles.chartBox} ${styles.chatBox2}`}>
-					{/* <!-- #02 --> */}
-					{/* <!-- Number--> */}
-					<div className={`${styles.chartNumber} ${styles.chartNumber2}`}></div>
-					{/* <!-- Cover --> */}
-					<div className={`${styles.chartCover} ${styles.chartCover2}`}>
-						<img src={HD1} alt="03" />
-					</div>
-					{/* <!-- Name --> */}
-					<div className={`${styles.chartName} ${styles.chartName2}`}>
-						{isCardListExisted && <span> {cardList[3].cardName}</span>}
-						<div className={styles.priceContainer}>
-							<div className={styles.priceTitle}>카드 번호</div>
-							{isCardListExisted && (
-								<div className={styles.priceContent}>{cardList[3].cardNum}</div>
-							)}
-						</div>
-						<div className={styles.separator}></div>
-						{/* <div className={styles.priceContainer}>
-                            <div className={styles.priceTitle}>현찰 팔 때</div>
-                            {isCardListExisted && (
-                                <div className={styles.priceContent}>{exchangeAllList[1].cashSellPrice}</div>
-                            )}
-                        </div> */}
-					</div>
-					{/* <!-- Button --> */}
-					{/* <div className={styles.link}>
-                        <a href="https://www.youtube.com/watch?v=wnJ6LuUFpMo">Listen</a>
-                    </div> */}
-				</div>
-			</div>
-		</div>
-	);
+        {selectedCardId && (
+          <div className={styles.transactionContainer}>
+            <h2>선택한 카드의 거래 내역</h2>
+            <ul>
+              {cardTransactions.map((transaction, index) => (
+                <li key={index}>
+                  거래 내역: {transaction.transactionDetails}
+                  {/* 거래 내역의 다른 정보를 표시하려면 여기에 추가 */}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default ExCardContent;
