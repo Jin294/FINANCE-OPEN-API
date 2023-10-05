@@ -6,6 +6,7 @@ import styles from './Mypage.module.css';
 
 import basicHttp from '../../api/basicHttp';
 import tokenHttp from '../../api/tokenHttp';
+import copyImg from '../../assets/img/copy.png'
 
 const Mypage = () => {
     const [apiToken, setApiToken] = useState('');
@@ -57,6 +58,20 @@ const Mypage = () => {
 
     const navigate = useNavigate();
 
+    const handleCopyClipBoardToken = async (text) => {
+        try {
+          await navigator.clipboard.writeText(text.apiToken);
+        } catch (error) {
+        }
+      };
+
+    const handleCopyClipBoard = async (text) => {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (error) {
+        }
+      };
+
     useEffect(() => {
         const getApiToken = async () => {
             try {
@@ -99,14 +114,9 @@ const Mypage = () => {
         <div className={styles.mypageBody}>
             <div className={styles.mypageContainer}>
                 <div className={styles.logoText}>마이페이지</div>
-                <input
-                    className={styles.inputBox}
-                    value={apiToken}
-                    onChange={handleapiToken}
-                    type="text"
-                    placeholder="apiToken"
-                    disabled
-                />
+                <div className={styles.textBox}>
+                    {apiToken}
+                    <img src={copyImg} onClick={() => handleCopyClipBoardToken({apiToken})}></img></div>
                 <button className={styles.apiTokenRefreshBtn} onClick={onClickapiTokenRefreshBtn}>
                     토큰 재발급
                 </button>
@@ -124,16 +134,25 @@ const Mypage = () => {
                 {clientList.map((client) => (
                     <div key={client.client_id} className={styles.client}>
                         <label className={styles.clientText}>RedirectURI</label>
-                        <input
+                        <div className={styles.textBox}>{client.web_server_redirect_uri}
+                            <img src={copyImg} onClick={() => handleCopyClipBoard(client.web_server_redirect_uri)}></img>
+                        </div>
+                        {/* <input
                             className={styles.clientContent}
                             value={client.web_server_redirect_uri}
                             type="text"
                             disabled
-                        />
+                        /> */}
                         <label className={styles.clientText}>client-id</label>
-                        <input className={styles.clientContent} value={client.client_id} type="text" disabled />
+                        <div className={styles.textBox}>{client.client_id}
+                            <img src={copyImg} onClick={() => handleCopyClipBoard(client.client_id)}></img>
+                        </div>
+                        {/* <input className={styles.clientContent} value={client.client_id} type="text" disabled /> */}
                         <label className={styles.clientText}>secret-id</label>
-                        <input className={styles.clientContent} value={client.client_secret} type="text" disabled />
+                        <div className={styles.textBox}>{client.client_secret}
+                            <img src={copyImg} onClick={() => handleCopyClipBoard(client.client_secret)}></img>
+                        </div>
+                        {/* <input className={styles.clientContent} value={client.client_secret} type="text" disabled /> */}
                     </div>
                 ))}
             </div>

@@ -46,7 +46,7 @@ const Login = () => {
             dispatch(setUserInfo({ accessToken: res.data.data['access-token'] }));
             console.log(userInfo);
             navigate('/');
-            alert('로그인 성공');
+            // alert('로그인 성공');
         } catch (error) {
             console.error('로그인 실패:', error);
             alert('로그인 실패');
