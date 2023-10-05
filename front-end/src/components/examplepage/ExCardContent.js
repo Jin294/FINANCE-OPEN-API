@@ -38,7 +38,7 @@ const ExCardContent = () => {
   const handleCardClick = async (cardId) => {
 	console.log(accessToken);
     try {
-      const res = await tokenHttp.get(
+      const res = await basicHttp.get(
         `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21`,
         {
           headers: {
