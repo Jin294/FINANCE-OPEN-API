@@ -18,6 +18,7 @@ import java.util.Map;
 @RequestMapping("/api/stock")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin("*")
 public class StockController {
     private final StockService stockService;
 

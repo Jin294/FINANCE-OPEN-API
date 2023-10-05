@@ -5,16 +5,14 @@ import com.iNine.resource.domain.exchange.dto.ResponseDto;
 import com.ssafy.iNine.OAuth.common.response.DataResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/exchange")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin("*")
 public class ExchangeController {
     private final ExchangeService exchangeService;
 //블록킹 방법

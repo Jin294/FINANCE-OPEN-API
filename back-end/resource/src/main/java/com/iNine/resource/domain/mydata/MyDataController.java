@@ -4,10 +4,7 @@ import com.iNine.resource.domain.mydata.dto.CardDto;
 import com.iNine.resource.domain.mydata.service.MyDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
@@ -16,6 +13,7 @@ import java.security.Principal;
 @RequestMapping("/api/cards")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin("*")
 public class MyDataController {
     private final MyDataService myDataService;
 
