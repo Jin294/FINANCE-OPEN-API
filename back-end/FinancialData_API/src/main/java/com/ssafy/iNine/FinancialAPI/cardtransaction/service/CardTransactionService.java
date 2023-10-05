@@ -61,10 +61,9 @@ public class CardTransactionService {
         List<CardTransactionDto.CardTransactionDataDto> paginatedTransactionList = paginatedTransaction(transactionList, nextPage, limit);
 
         // paginatedTransactionList의 마지막 값의 id와 transactionList 중 일치하는 id의 다음 id를 가져와서 nextPage로 세팅
-        CardTransactionDto.CardTransactionDataDto lastPaginatedTransaction = paginatedTransactionList.get(paginatedTransactionList.size() -1);
+        CardTransactionDto.CardTransactionDataDto lastPaginatedTransaction = paginatedTransactionList.get(paginatedTransactionList.size() - 1);
 
-        for(int i = 0; i<transactionList.size(); i++ ) {
-            transactionList.get(i);
+        for (int i = 0; i < transactionList.size(); i++) {
             if (lastPaginatedTransaction.getTransactionId().equals(transactionList.get(i).getId())) {
 
                 if (i + 1 < transactionList.size()) {
@@ -76,7 +75,7 @@ public class CardTransactionService {
         }
 
         // 응답 객체 생성
-        transactionResponse.setApprovedCnt(paginatedTransactionList.size());
+        transactionResponse.setApprovedCnt(transactionList.size());
         transactionResponse.setApprovedList(paginatedTransactionList);
         return transactionResponse;
     }
@@ -122,7 +121,7 @@ public class CardTransactionService {
 
 
     public List<CardTransaction> generateTransactionList(Card card) {
-        int transactionCnt = ThreadLocalRandom.current().nextInt(1, 11);
+        int transactionCnt = ThreadLocalRandom.current().nextInt(50, 151);
 
         List<CardTransaction> transactions = new ArrayList<>();
 
@@ -134,8 +133,6 @@ public class CardTransactionService {
             transaction.setStatus(status);
 
             Timestamp approvedDtime = null;
-
-
 
 
             if (card.getCardType().equals("01")) {
@@ -151,12 +148,12 @@ public class CardTransactionService {
             transaction.setMerchantId(ThreadLocalRandom.current().nextLong(1, merchantRepository.count()));
             transaction.setApprovedAmt(generateApprovedAmt());
 
-
+            transaction.setApprovedNum(generateApprovedNum());
 
             if (status.equals("01")) {
 
                 approvedDtime = generateApprovedDtime();
-                transaction.setApprovedNum(generateApprovedNum());
+
             } else {
 
 
@@ -165,11 +162,11 @@ public class CardTransactionService {
                 transaction.setTransDtime(transDtime);
 
                 if (transaction.getStatus().equals("02")) {
-                    // status가 01인 거래 내역을 하나 더 생성한다. status 외 나머지 필드는 status가 02인 것과 같다.
+
                     CardTransaction newTransaction = new CardTransaction();
                     newTransaction.setStatus("01");
                     newTransaction.setApprovedNum(generateApprovedNum());
-                    newTransaction.setApprovedDtime(generateApprovedDtime());
+                    newTransaction.setApprovedDtime(approvedDtime);
                     newTransaction.setPayType(transaction.getPayType());
                     newTransaction.setTransDtime(null);
                     newTransaction.setMerchantId(transaction.getMerchantId());
@@ -179,23 +176,20 @@ public class CardTransactionService {
                     newTransaction.setCardId(transaction.getCardId());
 
 
-
                     newTransaction.setDtime(approvedDtime);
 
                     transactions.add(newTransaction);
-                    System.out.println(newTransaction);
+
                 }
 
 
                 if (transaction.getStatus().equals("03")) {
-                    //status가 01인 거래 내역을 하나 더 생성한다. status외 나머지 필드는 status가 02인 것과 같다.
-
 
                     if (approvedDtime.before(transDtime)) {
-                        transaction.setApprovedNum(generateApprovedNum());
+
                     } else {
 
-                        transaction.setApprovedNum(generateApprovedNum());
+
                         approvedDtime = new Timestamp(transDtime.getTime() - 10000);
                     }
 
@@ -214,7 +208,6 @@ public class CardTransactionService {
                     newTransaction.setCardId(transaction.getCardId());
 
 
-
                     newTransaction.setDtime(approvedDtime);
 
                     transactions.add(newTransaction);
@@ -223,14 +216,11 @@ public class CardTransactionService {
             }
 
             transaction.setApprovedDtime(approvedDtime);
-
             transaction.setDtime(approvedDtime);
-
 
 
             transactions.add(transaction);
         }
-
 
 
         return transactions;
@@ -273,11 +263,10 @@ public class CardTransactionService {
     }
 
 
-
     private Timestamp generateTransDtime(Timestamp approvedDtime) {
         Instant approvedInstant = approvedDtime.toInstant();
 
-        long randomDays = ThreadLocalRandom.current().nextLong(1, 31);
+        long randomDays = ThreadLocalRandom.current().nextLong(1, 8);
         Instant generatedInstant = approvedInstant.plus(Duration.ofDays(randomDays));
 
         return Timestamp.from(generatedInstant);

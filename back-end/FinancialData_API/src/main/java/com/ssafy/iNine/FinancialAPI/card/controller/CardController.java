@@ -22,7 +22,7 @@ public class CardController {
     @GetMapping("/cards")
     public DataResponse<CardDto.CardResponseDto> cardList(
             @RequestParam("orgCode") String orgCode,
-            @RequestParam("nextPage") Integer nextPage,
+            @RequestParam(value = "nextPage", required = false) String nextPage,
             @RequestParam("limit") Integer limit,
             @RequestParam("userId") String userId
     ) {

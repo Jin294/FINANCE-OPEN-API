@@ -10,4 +10,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
 
     List<Card> findByUserId(String userId);
+
+
 }

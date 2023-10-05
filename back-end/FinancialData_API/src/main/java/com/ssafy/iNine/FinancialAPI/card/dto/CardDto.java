@@ -15,7 +15,7 @@ public class CardDto {
     @AllArgsConstructor
     public static class CardRequestDto {
         private String orgCode;
-        private Integer nextPage; //cardId 보다 큰 경우 mysql 다음 개체의 id 값
+        private String nextPage; //cardId 보다 큰 경우 mysql 다음 개체의 id 값
         private Integer limit;
         private String userId;
 
@@ -65,7 +65,7 @@ public class CardDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CardResponseDto {
-        private Integer nextPage;
+        private String nextPage;
         private Integer cardCnt;
         private List<CardDataDto> cardList;
 

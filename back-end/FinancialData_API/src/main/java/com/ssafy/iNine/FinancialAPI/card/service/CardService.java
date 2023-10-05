@@ -2,6 +2,8 @@ package com.ssafy.iNine.FinancialAPI.card.service;
 
 import com.ssafy.iNine.FinancialAPI.card.dto.CardDto;
 import com.ssafy.iNine.FinancialAPI.card.repository.CardRepository;
+import com.ssafy.iNine.FinancialAPI.common.exception.CommonException;
+import com.ssafy.iNine.FinancialAPI.common.exception.ExceptionType;
 import com.ssafy.iNine.FinancialAPI.entity.Card;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -38,7 +39,7 @@ public class CardService {
         }
 
         //페이지네이션
-        Integer nextPage = cardRequestDto.getNextPage();
+        String nextPage = cardRequestDto.getNextPage();
         Integer limit = cardRequestDto.getLimit();
 
 
@@ -52,27 +53,34 @@ public class CardService {
 
             if (lastPaginatedCard.getCardId().equals(cardList.get(i).getCardId())) {
                 if (i + 1 < cardList.size()) {
-                    cardResponse.setNextPage(Math.toIntExact(cardList.get(i + 1).getCardId()));
+                    cardResponse.setNextPage(String.valueOf(Math.toIntExact(cardList.get(i + 1).getCardId())));
                 }
             }
         }
 
         // 응답 객체 생성
 
-//        cardResponse.setNextPage(nextPage);
-        cardResponse.setCardCnt(paginatedCardList.size());
+        cardResponse.setCardCnt(cardList.size());
         cardResponse.setCardList(paginatedCardList);
 
         return cardResponse;
     }
+    private List<CardDto.CardDataDto> paginateCard(List<Card> cardList, String nextPage, Integer limit) {
+        int startIndex = -1;
 
-
-    private List<CardDto.CardDataDto> paginateCard(List<Card> cardList, Integer nextPage, int limit) {
-        int startIndex;
-
-        if (nextPage != null) {
+        if (nextPage != null && !nextPage.isEmpty()) {
             // 이전 페이지에서 마지막으로 조회한 카드의 인덱스를 찾음
-            startIndex = findLastIndex(cardList, nextPage) + 1;
+            for (int i = 0; i < cardList.size(); i++) {
+                if (nextPage.equals(String.valueOf(cardList.get(i).getCardId()))) {
+                    startIndex = i;
+                    break;
+                }
+            }
+
+            if (startIndex == -1) {
+                // 유효한 'nextPage'가 주어졌지만 해당 카드를 찾을 수 없는 경우, 빈 리스트 반환
+                return new ArrayList<>();
+            }
         } else {
             startIndex = 0;
         }
@@ -90,16 +98,6 @@ public class CardService {
 
         return paginatedCardData;
     }
-
-    private int findLastIndex(List<Card> cardList, Integer nextPage) {
-        for (int i = cardList.size() - 1; i >= 0; i--) {
-            if (cardList.get(i).getCardId().equals(nextPage)) {
-                return i;
-            }
-        }
-        return -1; // nextPage가 존재하지 않는 경우
-    }
-
 
 
 
@@ -127,8 +125,7 @@ public class CardService {
     }
 
     private CardDto.CardDataDto generateRandomCard() {
-        //  랜덤한 카드 정보 생성
-//        UUID cardId = UUID.randomUUID();
+
         String cardNum = generateRandomCardNum();
         String cardName = generateRandomCardName();
         Integer cardMember = generateRandomCardMember();
@@ -147,14 +144,14 @@ public class CardService {
 
     private String generateRandomCardNum() {
         Random random = new Random();
-        long cardNumber = ThreadLocalRandom.current().nextLong(10_0000_0000_0000_0000L, 100_0000_0000_0000_0000L);
+        long cardNumber = ThreadLocalRandom.current().nextLong(1_0000_0000_0000_0000L, 10_0000_0000_0000_0000L);
         String maskedCardNumber = maskCardNumber(cardNumber);
         return maskedCardNumber;
     }
 
     private String maskCardNumber(long cardNumber) {
         String cardNumberStr = String.valueOf(cardNumber);
-        return cardNumberStr.substring(0, 6) + "******" + cardNumberStr.substring(12);
+        return cardNumberStr.substring(0, 4) + "********" + cardNumberStr.substring(13);
     }
 
     private String generateRandomCardName() {

@@ -1,5 +1,6 @@
 package com.ssafy.iNine.FinancialAPI.entity;
 
+import com.ssafy.iNine.FinancialAPI.common.exception.CommonException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Card {
     private String cardName; // 카드상품명
     private Integer cardMember; // 본인/가족 구분코드 1:본인, 2: 가족
     private String cardType; // 01: 신용,  02: 체크(직불포함), 03: 소액신용체크
+
 
 
 }

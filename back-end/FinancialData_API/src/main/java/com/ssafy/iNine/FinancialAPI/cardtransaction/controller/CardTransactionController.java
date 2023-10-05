@@ -25,7 +25,7 @@ public class CardTransactionController {
             @RequestParam("orgCode") String orgCode,
             @RequestParam("fromDate") String fromDateStr,
             @RequestParam("toDate") String toDateStr,
-            @RequestParam("nextPage") String nextPage,
+            @RequestParam(name = "nextPage", required = false) String nextPage,
             @RequestParam("limit") Integer limit
     ) {
         Timestamp fromDate = Timestamp.valueOf(fromDateStr + " 00:00:00");
