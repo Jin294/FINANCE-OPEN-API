@@ -47,8 +47,7 @@ public class UserService {
             messageHelper.setTo(email);
             messageHelper.setSubject("SSAFY FINANCIAL OPEN API 이메일 인증코드 안내");
             messageHelper.setText("    <div style=\"width: 700px; height: 500px; margin: 50px\">\n" +
-                    "      <img src=\"https://i.ibb.co/ctnXLZr/email-ting-logo-removebg-preview.png\" alt=\"ting logo\" style=\"width: 100px\" />\n" +
-                    "      <h2 style=\"font-weight: 900\">Ting 서비스의 이메일 확인을 위해 인증번호를 보내드려요</h2>\n" +
+                    "      <h2 style=\"font-weight: 900\">이메일 확인을 위해 인증번호를 보내드려요</h2>\n" +
                     "      <p>이메일 인증 화면에서 아래의 인증번호를 입력하고 인증을 완료해주세요.</p>\n" +
                     "      <h1>" + verifiedCode + "</h1>\n" +
                     "\n" +
@@ -62,7 +61,7 @@ public class UserService {
                     "\n" +
                     "<pre>\n" +
                     "이 메일은 발신 전용 메일이에요.\n" +
-                    "SSAFY FINANCIAL OPEN API에 궁금한 점이 있으시면 답장을 통해 질문해주세요. © SSAFY Ting Inc.\n" +
+                    "SSAFY FINANCIAL OPEN API에 궁금한 점이 있으시면 답장을 통해 질문해주세요. © SSAFY FINANCIAL OPEN API Inc.\n" +
                     "</pre>\n" +
                     "    </div>", true);
             javaMailSender.send(messageHelper.getMimeMessage());
