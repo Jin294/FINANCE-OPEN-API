@@ -20,7 +20,7 @@ public class MyDataController {
     private final MyDataService myDataService;
 
     @GetMapping
-    public Mono<CardDto.CardInfoResponse> getCardList(@RequestParam String orgCode, @RequestParam String nextPage,
+    public Mono<CardDto.CardInfoResponse> getCardList(@RequestParam String orgCode, @RequestParam(required = false) String nextPage,
                                                       @RequestParam int limit, Principal principal){
         String userId = principal.getName().toString();
         log.info("userId:{}", userId);

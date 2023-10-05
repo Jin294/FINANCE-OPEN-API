@@ -18,13 +18,17 @@ public class MyDataService {
     //보유한 카드 목록 조회
     public Mono<CardDto.CardInfoResponse> getUserCardInfo(String orgCode, String nextPage, Integer limit, String userId) {
 
-        return webClient.get().uri(uriBuilder -> uriBuilder
+        return webClient.get().uri(uriBuilder -> {
+                    uriBuilder
                         .path("/cards")
                         .queryParam("orgCode", orgCode)
-                        .queryParam("nextPage", nextPage)
                         .queryParam("limit", limit)
-                        .queryParam("userId", userId)
-                        .build())
+                        .queryParam("userId", userId);
+                        if(nextPage != null) {
+                          uriBuilder.queryParam("nextPage", nextPage);
+                        }
+                        return uriBuilder.build();
+                        })
                 .retrieve()
                 .bodyToMono(CardDto.CardInfoResponse.class);
     }
@@ -32,15 +36,18 @@ public class MyDataService {
     //카드 거래 내역
     public Mono<CardDto.ApprovedInfoResponse> getCardTransactionInfo(Long cardId, String orgCode, String fromDate, String toDate, String nextPage, int limit) {
 
-        return webClient.get().uri(uriBuilder -> uriBuilder
+        return webClient.get().uri(uriBuilder -> {uriBuilder
                         .path("/cards/transaction")
                         .queryParam("cardId", cardId)
                         .queryParam("orgCode", orgCode)
                         .queryParam("fromDate", fromDate)
                         .queryParam("toDate", toDate)
-                        .queryParam("nextPage", nextPage)
-                        .queryParam("limit", limit)
-                        .build())
+                        .queryParam("limit", limit);
+                        if(nextPage != null) {
+                            uriBuilder.queryParam("nextPage", nextPage);
+                        }
+                        return uriBuilder.build();
+                        })
                 .retrieve()
                 .bodyToMono(CardDto.ApprovedInfoResponse.class);
     }
