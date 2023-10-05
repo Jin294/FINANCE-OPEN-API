@@ -36,6 +36,7 @@ const ExCardContent = () => {
   }, [code]); // 코드가 변경될 때마다 액세스 토큰을 다시 가져오도록 설정
 
   const handleCardClick = async (cardId) => {
+	console.log(accessToken);
     try {
       const res = await tokenHttp.get(
         `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21`,
