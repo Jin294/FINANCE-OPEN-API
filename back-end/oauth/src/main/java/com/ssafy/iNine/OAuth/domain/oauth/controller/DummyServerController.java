@@ -24,7 +24,7 @@ public class DummyServerController {
         OauthToken.request.accessToken request = new OauthToken.request.accessToken(){{
             setCode(requestCode);
             setGrant_type("authorization_code");
-            setRedirect_uri("http://localhost:3000"+"/excardcontent");
+            setRedirect_uri(hostUrl+"/excardcontent");
             setScope("read");
         }};
 
