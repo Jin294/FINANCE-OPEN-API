@@ -11,11 +11,13 @@ const ExCardContent = () => {
   const [cardList, setCardList] = useState([]);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [cardTransactions, setCardTransactions] = useState([]);
+  const [accessToken, setAccessToken] = useState(null); // 액세스 토큰 상태 추가
 
   useEffect(() => {
     const getCardContent = async () => {
       try {
         const res = await basicHttp.get(`/oauth/access-token?code=${code}`);
+        setAccessToken(res.data.access_token); // 액세스 토큰을 상태로 저장
         const res2 = await basicHttp.get(
           `https://j9b309.p.ssafy.io/api/cards?orgCode=exampleOrgcode&limit=10`,
           {
@@ -28,15 +30,20 @@ const ExCardContent = () => {
       } catch (error) {}
     };
     getCardContent();
-  }, []);
+  }, [code]); // 코드가 변경될 때마다 액세스 토큰을 다시 가져오도록 설정
 
   const handleCardClick = async (cardId) => {
     try {
       const res = await tokenHttp.get(
-        `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21`
+        `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`, // 저장된 액세스 토큰을 사용
+          },
+        }
       );
-      setCardTransactions(res.data); // 거래 내역을 상태에 저장
-      setSelectedCardId(cardId); // 선택한 카드의 ID를 상태에 저장
+      setCardTransactions(res.data);
+      setSelectedCardId(cardId);
     } catch (error) {}
   };
 
@@ -45,7 +52,7 @@ const ExCardContent = () => {
     require("../../assets/img/KB2.PNG"),
     require("../../assets/img/KB3.PNG"),
     require("../../assets/img/HD1.PNG"),
-    // 여기에 추가 이미지를 넣으세요...
+    
   ];
 
   return (
@@ -59,11 +66,10 @@ const ExCardContent = () => {
           <div
             key={index}
             className={`${styles.chartBox} ${styles.chatBox1}`}
-            onClick={() => handleCardClick(card.cardId)} // 카드 클릭 핸들러 추가
+            onClick={() => handleCardClick(card.cardId)}
           >
             <div className={`${styles.chartNumber} ${styles.chartNumber1}`}></div>
             <div className={`${styles.chartCover} ${styles.chartCover1}`}>
-              {/* 랜덤 이미지 선택 */}
               <img src={cardImages[Math.floor(Math.random() * cardImages.length)]} alt={card.cardName} />
             </div>
             <div className={`${styles.chartName} ${styles.chartName1}`}>
@@ -83,7 +89,7 @@ const ExCardContent = () => {
             <ul>
               {cardTransactions.map((transaction, index) => (
                 <li key={index}>
-                  거래 내역: {transaction.transactionDetails}
+                  거래 내역: {transaction.approvedList}
                   {/* 거래 내역의 다른 정보를 표시하려면 여기에 추가 */}
                 </li>
               ))}
