@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/stock")
+@RequestMapping("/invest")
 @RequiredArgsConstructor
 public class Controller {
 
