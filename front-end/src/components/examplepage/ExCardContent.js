@@ -11,13 +11,13 @@ const ExCardContent = () => {
   const [cardList, setCardList] = useState([]);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [approvedList, setApprovedList] = useState([]);
+  const [accessToken, setAccessToken] = useState(null); // 액세스 토큰 상태 추가
 
   useEffect(() => {
     const getCardContent = async () => {
       try {
         const res = await basicHttp.get(`/oauth/access-token?code=${code}`);
-        console.log(res);
-
+        setAccessToken(res.data.access_token); // 액세스 토큰을 상태로 저장
         const res2 = await basicHttp.get(
           `https://j9b309.p.ssafy.io/api/cards?orgCode=exampleOrgcode&limit=10`,
           {
@@ -27,26 +27,22 @@ const ExCardContent = () => {
           }
         );
         setCardList(res2.data.data.cardList);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     getCardContent();
-  }, []);
+  }, [code]); // 코드가 변경될 때마다 액세스 토큰을 다시 가져오도록 설정
 
   const handleCardClick = async (cardId) => {
     try {
-      const res = await basicHttp.get(`/oauth/access-token?code=${code}`);
-
-      const res2 = await tokenHttp.get(
+      const res = await tokenHttp.get(
         `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21`,
         {
           headers: {
-            Authorization: `Bearer ${res.data.access_token}`,
+            Authorization: `Bearer ${accessToken}`, // 저장된 액세스 토큰을 사용
           },
         }
       );
-      setApprovedList(res2.data.data.approvedList);
+      setApprovedList(res.data.data.approvedList);
       setSelectedCardId(cardId);
     } catch (error) {}
   };
@@ -56,6 +52,7 @@ const ExCardContent = () => {
     require("../../assets/img/KB2.PNG"),
     require("../../assets/img/KB3.PNG"),
     require("../../assets/img/HD1.PNG"),
+    // 여기에 추가 이미지를 넣으세요...
   ];
 
   return (
@@ -71,14 +68,9 @@ const ExCardContent = () => {
             className={`${styles.chartBox} ${styles.chatBox1}`}
             onClick={() => handleCardClick(card.cardId)}
           >
-            <div
-              className={`${styles.chartNumber} ${styles.chartNumber1}`}
-            ></div>
+            <div className={`${styles.chartNumber} ${styles.chartNumber1}`}></div>
             <div className={`${styles.chartCover} ${styles.chartCover1}`}>
-              <img
-                src={cardImages[Math.floor(Math.random() * cardImages.length)]}
-                alt={card.cardName}
-              />
+              <img src={cardImages[Math.floor(Math.random() * cardImages.length)]} alt={card.cardName} />
             </div>
             <div className={`${styles.chartName} ${styles.chartName1}`}>
               <span>{card.cardName}</span>
