@@ -26,7 +26,7 @@ import java.util.Collection;
 @Table(name="user")
 public class User implements UserDetails {
     @Id
-    @Column(nullable = true, unique = true, length = 20)
+    @Column(nullable = true, unique = true, length = 255)
     private String id;
 
     @Column(length = 100)
