@@ -56,7 +56,6 @@ const ExCardContent = () => {
     require("../../assets/img/KB2.PNG"),
     require("../../assets/img/KB3.PNG"),
     require("../../assets/img/HD1.PNG"),
-    // 여기에 추가 이미지를 넣으세요...
   ];
 
   return (
@@ -86,51 +85,36 @@ const ExCardContent = () => {
               </div>
               <div className={styles.separator}></div>
             </div>
-            {cardList.map((card, index) => (
-              <div
-                key={index}
-                className={`${styles.chartBox} ${styles.chatBox1}`}
-                onClick={() => handleCardClick(card.cardId)}
-              >
-                <div
-                  className={`${styles.chartNumber} ${styles.chartNumber1}`}
-                ></div>
-                <div className={`${styles.chartCover} ${styles.chartCover1}`}>
-                  <img src={cardImages[index]} alt={card.cardName} />
-                </div>
-                <div className={`${styles.chartName} ${styles.chartName1}`}>
-                  <span>{card.cardName}</span>
-                  <div className={styles.priceContainer}>
-                    <div className={styles.priceTitle}>카드 번호</div>
-                    <div className={styles.priceContent}>{card.cardNum}</div>
-                  </div>
-                  <div className={styles.separator}></div>
-                </div>
-                {selectedCardId === card.cardId && (
-                  <div className={styles.table}>
-                    <h2>카드 국내 승인 내역</h2>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>승인 시간</th>
-                          <th>가맹점</th>
-                          <th>승인 금액</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {approvedList.map((transaction, index) => (
-                          <tr key={index}>
-                            <td>{transaction.approvedDtime ? transaction.approvedDtime.slice(0, 10) : transaction.transDtime.slice(0, 10)}</td>
-                            <td>{transaction.merchantName}</td>
-                            <td>{transaction.transDtime? '+' : '-' }{transaction.approvedAmt}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+            {selectedCardId === card.cardId && (
+              <div className={styles.table}>
+                <h2>카드 국내 승인 내역</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>승인 시간</th>
+                      <th>가맹점</th>
+                      <th>승인 금액</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {approvedList.map((transaction, index) => (
+                      <tr key={index}>
+                        <td>
+                          {transaction.approvedDtime
+                            ? transaction.approvedDtime
+                            : transaction.transDtime}
+                        </td>
+                        <td>{transaction.merchantName}</td>
+                        <td>
+                          {transaction.transDtime ? "+" : "-"}
+                          {transaction.approvedAmt}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            ))}
+            )}
           </div>
         ))}
       </div>
