@@ -64,13 +64,14 @@ const ExCardContent = () => {
         <div className={styles.chartTitle}>
           <h1>카드 내역</h1>
         </div>
-
+		
         {cardList.map((card, index) => (
           <div
             key={index}
             className={`${styles.chartBox} ${styles.chatBox1}`}
             onClick={() => handleCardClick(card.cardId)}
           >
+			<div className={styles.cardContent}>
             <div
               className={`${styles.chartNumber} ${styles.chartNumber1}`}
             ></div>
@@ -85,13 +86,14 @@ const ExCardContent = () => {
               </div>
               <div className={styles.separator}></div>
             </div>
+			</div>
             {selectedCardId === card.cardId && (
               <div className={styles.table}>
-                <h2>카드 국내 승인 내역</h2>
+                <h2>카드 승인 내역</h2>
                 <table>
                   <thead>
                     <tr>
-                      <th>승인 시간</th>
+                      <th>시간</th>
                       <th>가맹점</th>
                       <th>승인 금액</th>
                     </tr>
