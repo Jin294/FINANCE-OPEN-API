@@ -102,7 +102,7 @@ const ExCardContent = () => {
                     {approvedList.map((transaction, index) => (
                       <tr key={index}>
                         <td>
-                          {transaction.approvedDtime
+                          {transaction.approvedDtime !== null
                             ? transaction.approvedDtime
                             : transaction.transDtime}
                         </td>

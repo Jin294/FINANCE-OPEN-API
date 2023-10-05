@@ -37,6 +37,8 @@
 
 /* Ranking */
 .chartBox {
+	display: flex;
+	flex-direction: column;
 	width: 1000px;
 	margin: 50px auto;
 }
@@ -149,6 +151,12 @@
     margin: 0 auto 20px;
     word-break: keep-all;
     line-height: 1.5;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+}
+
+.table tr {
 	text-align: center;
 }
 
