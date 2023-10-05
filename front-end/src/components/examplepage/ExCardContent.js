@@ -39,7 +39,7 @@ const ExCardContent = () => {
     console.log(accessToken);
     try {
       const res = await basicHttp.get(
-        `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21&limit=20`,
+        `https://j9b309.p.ssafy.io/api/cards/transaction?cardId=${cardId}&orgCode=exampleOrgcod&fromDate=2021-01-10&toDate=2024-09-21&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`, // 저장된 액세스 토큰을 사용
@@ -102,10 +102,16 @@ const ExCardContent = () => {
                     {approvedList.map((transaction, index) => (
                       <tr key={index}>
                         <td>
-                          {transaction.transDtime !== null
+                          {transaction.transDtime !== null &&
+                          transaction.approvedDtime !== null
                             ? transaction.transDtime.slice(0, 10)
-                            : transaction.approvedDtime.slice(0, 10)}
+                            : (
+                                transaction.transDtime ||
+                                transaction.approvedDtime ||
+                                ""
+                              ).slice(0, 10)}
                         </td>
+
                         <td>{transaction.merchantName}</td>
                         <td>
                           {transaction.transDtime ? "+" : "-"}
