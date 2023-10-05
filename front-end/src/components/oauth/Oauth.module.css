@@ -58,6 +58,7 @@
   .text{
     text-align: left; 
     margin-right: 400px;
+    width: 370px;
 }
 
 .text2{
@@ -65,3 +66,27 @@
     margin-right: 600px;
 }
 
+.eximage {
+    margin: 10px;
+}
+
+.imgs {
+    display: flex;
+}
+
+.eximage img {
+    width: 420px;
+    height: 270px;
+}
+
+.oauthButton {
+    font-family: 'Pretendard-Regular';
+    color: white;
+    font-size: 16px;
+    margin: 0 20px;
+    padding: 10px;
+    background-color: #202C3E;
+    box-shadow: 2px 1px 3px 2px gray inset;
+    border-radius: 5px;
+    cursor: pointer;
+}
