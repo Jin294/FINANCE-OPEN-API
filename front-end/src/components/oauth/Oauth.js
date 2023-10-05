@@ -1,6 +1,9 @@
 import React from "react";
 import oauthImage from "../../assets/img/oauth.PNG";
 import styles from "./Oauth.module.css";
+import exImage1  from "../../assets/img/oauth2.PNG";
+import exImage2  from "../../assets/img/oauth3.PNG";
+import exImage3  from "../../assets/img/oauth4.PNG";
 
 const OauthExplain = () => {
   return (
@@ -44,8 +47,9 @@ const OauthExplain = () => {
           </tr>
         </tbody>
       </table>
+
       <div className={styles.text2}>
-      <h3>응답 예시</h3>
+        <h3>응답 예시</h3>
       </div>
       <pre id="json" className={styles.code}>
         HTTP/1.1 302 Found<br></br>
@@ -107,17 +111,31 @@ const OauthExplain = () => {
         </tbody>
       </table>
       <div className={styles.text2}>
-      <h3>응답 예시</h3>
+        <h3>응답 예시</h3>
       </div>
+      
       <pre id="json" className={styles.code}>
         {`
-    HTTP/1.1 200 OK Content-Type: application/json;charset=UTF-8
-    {
-      token_type: "bearer",
-      access_token: "Your Access Token",
-    }
-  `}
+          HTTP/1.1 200 OK Content-Type: application/json;charset=UTF-8
+          {
+            token_type: "bearer",
+            access_token: "Your Access Token",
+          }
+        `}
       </pre>
+
+      <div className={styles.text}>
+        <h2>OAuth 사용 예시<a className={styles.oauthButton}
+          href="https://j9b309.p.ssafy.io/excard"
+          target="_blank"
+          rel="noopener noreferrer"
+          >사이트 이동</a></h2>
+      </div>
+      <div className={styles.imgs}>
+        <div className={styles.eximage}><img src={exImage1}></img></div>
+        <div className={styles.eximage}><img src={exImage3}></img></div>
+      </div>
+
     </div>
   );
 };
