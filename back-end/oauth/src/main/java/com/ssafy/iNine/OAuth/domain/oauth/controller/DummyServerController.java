@@ -26,11 +26,11 @@ public class DummyServerController {
         OauthToken.request.accessToken request = new OauthToken.request.accessToken(){{
             setCode(requestCode);
             setGrant_type("authorization_code");
-            setRedirect_uri(hostUrl+"/excardcontent");
+            setRedirect_uri("http://localhost:3000"+"/excardcontent");
             setScope("read");
         }};
 
-        HttpResponse<OauthToken.response> response = Unirest.post(hostUrl+"/oauth/token")
+        HttpResponse<OauthToken.response> response = Unirest.post("http://localhost:3000"+"/oauth/token")
                 .header("Authorization", "Basic " + encodingCredentials)
                 .fields(request.getMapData())
                 .asObject(OauthToken.response.class);
