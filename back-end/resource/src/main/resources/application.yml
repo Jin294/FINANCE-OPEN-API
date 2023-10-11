@@ -21,3 +21,9 @@ url:
   host: http://j9b309.p.ssafy.io
 
 #  host: http://j9b309.p.ssafy.io:8084
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
